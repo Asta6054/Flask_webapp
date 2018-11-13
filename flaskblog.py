@@ -527,3 +527,6 @@ def staff():
         session.pop('user', None)
         session.pop('role', None)
         return redirect(url_for('login'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
