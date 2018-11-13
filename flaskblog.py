@@ -4,7 +4,7 @@ from forms import RegistrationForm, LoginForm, MenuForm
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_required
 import json
-import urllib
+import urllib.request
 import datetime
 import string, json
 
@@ -44,7 +44,7 @@ class googleapi:
             startLoc = startLoc.replace(' ','+')
             endLoc = endLoc.replace(' ','+')
             URL="https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="+startLoc+"&destinations="+endLoc+"&key="+self.googleapikey
-            requestinfo = json.load(urllib.urlopen(URL))
+            requestinfo = json.load(urllib.request.urlopen(URL))
             return requestinfo
 
 @app.route('/')
