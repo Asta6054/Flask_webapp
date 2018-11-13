@@ -32,9 +32,9 @@ function cooking(o_id,ct,or_id,it_id) {
   var coutput = '<article class="media content-section col">';
   coutput += '<div class="media-body">';
   coutput += '<div class="well">';
-  coutput += '<h3>'+ or_id + '</h3>';
-  coutput += '<p>' + it_id + '</p>';
-  coutput += '<p>' + ct + '</p>';
+  coutput += '<h3>Order Number: '+ or_id + '</h3>';
+  coutput += '<p>Item Number: ' + it_id + '</p>';
+  coutput += '<p>Cook Time' + ct + '</p>';
   coutput += '<span id="time'+ct+'" onload=starttimer()>00:00</span>';
   coutput += '</div>';
   coutput += '</div>';
@@ -58,7 +58,7 @@ function timer(duration, display) {
     minutes = minutes < 10 ? "0" + minutes : minutes;
     seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    display.textContent = minutes + ":" + seconds;
+    display.textContent = minutes + ":" + seconds +"Mins Left";
 
     if (--timer < 0) {
       timer = duration;
@@ -91,7 +91,7 @@ function pending() {
     console.log($(e).attr("data-cooktime"));
     console.log($(e).attr("data-itemid"));
     console.log($(e).attr("data-orderid"));
-    var or_id = $(e).attr("data-itemid");
+    var or_id = $(e).attr("data-orderid");
     var it_id = $(e).attr("data-itemid");
     var ct = $(e).attr("data-cooktime");
     ins(o_id,ct,or_id,it_id);
