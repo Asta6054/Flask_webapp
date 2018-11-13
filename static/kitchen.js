@@ -34,7 +34,7 @@ function cooking(o_id,ct,or_id,it_id) {
   coutput += '<div class="well">';
   coutput += '<h3>Order Number: '+ or_id + '</h3>';
   coutput += '<p>Item Number: ' + it_id + '</p>';
-  coutput += '<p>Cook Time' + ct + '</p>';
+  coutput += '<p>Cook Time: ' + ct + '</p>';
   coutput += '<span id="time'+ct+'" onload=starttimer()>00:00</span>';
   coutput += '</div>';
   coutput += '</div>';
@@ -58,7 +58,7 @@ function timer(duration, display) {
     minutes = minutes < 10 ? "0" + minutes : minutes;
     seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    display.textContent = minutes + ":" + seconds +"Mins Left";
+    display.textContent = minutes + ":" + seconds +" Mins Left";
 
     if (--timer < 0) {
       timer = duration;
@@ -74,9 +74,9 @@ function pending() {
     $.each(data, function(key, data){
       console.log(data);
       output +=  '<div id="pend'+data.CookTime+'">';
-      output +=  '<p class="article-content" style="font-size: 12px" id="'+data.OrderId+'">OrderId:'+ data.OrderId + '<br>';
-      output +=  '<br>ItemId:'+ data.ItemId + '<br>';
-      output +=  '<br> CookTime:' + data.CookTime + '</p>';
+      output +=  '<p class="article-content" style="font-size: 12px" id="'+data.OrderId+'">OrderId: '+ data.OrderId + '<br>';
+      output +=  '<br>ItemId: '+ data.ItemId + '<br>';
+      output +=  '<br> CookTime: ' + data.CookTime + '</p>';
       output +=  '<div class="row container">';
       output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" data-itemid="'+data.ItemId+'" data-cooktime="'+data.CookTime+'" data-orderid="'+data.OrderId+'" class="btn btnuhr btn-small bg-info col-6" style="font-size: 10px">Move To Cooking</a>';
       output +=  '</div>';
