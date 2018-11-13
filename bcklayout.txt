@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+  {% if title %}
+  <title>{{ title }}</title>
+  {% else %}
+  <title>My Muse</title>
+  {% endif %}
+</head>
+<body class="bg-img" style="background-image: url({{ url_for('static', filename='background/bg4.jpg') }})">
+  <!-- <body> -->
+
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand font-weight-bold font-italic" style="font-family: Times New Roman, Times, serif" href="{{url_for('home')}}"> <img class="logo" src="static/background/logo4.png" height="40">Muse</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" style="background: rgba(253,247,223,0.9);
+      border-bottom-left-radius: 30px 100%;
+      border-bottom-right-radius: 30px 100%" id="navbar1">
+        <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link text-dark" href="{{url_for('home')}}">Home</a>
+          <a class="nav-item nav-link text-dark" href="{{url_for('home')}}">About</a>
+        </div>
+        <!-- Navbar Right Side -->
+        <div class="navbar-nav">
+          {% if 'user' in session %}
+          <a class="nav-item nav-link text-dark" href="{{ url_for('logout') }}">Logout</a>
+          {% else %}
+          <a class="nav-item nav-link text-dark" href="{{ url_for('login') }}">Login</a>
+          <a class="nav-item nav-link text-dark" href="{{ url_for('register') }}">Register</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </header>
+    <div class="content">
+        <div class="row">
+          <div class="col mx-auto">
+            {% with messages = get_flashed_messages(with_categories=true)%}
+            {%if messages%}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{message}}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+    </div>
+  <footer class="footer">
+    <div class="text-white text-center col">
+      <div>
+        <p> Copyright © MyRestaurant Plugin 2018. All right reserved. </p>
+      </div>
+    </div>
+  </footer>
+  <!--/.footer-->
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script>
+  function activatePlacesSearch(){
+    var input = document.getElementById('search_term');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+  }
+  </script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2TMNF1bewLerQgvelJwKPu1xkAMZbz7c&libraries=places&callback=activatePlacesSearch"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>

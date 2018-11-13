@@ -1,0 +1,78 @@
+{% extends "adminlayout.html" %}
+{% block content1 %}
+
+<div class="container-fluid" style="background: rgba(0,1,4,.6)">
+  <br>
+  <legend class="border-bottom mb-4 font-weight-bold font-italic text-white" style="font-family: Times New Roman, Times, serif">User List</legend>
+    {% for m in post %}
+    {%if m['role'] == 'admin'%}
+  <div class="row container">
+  <div class="media content-section bg-danger" >
+    <div class="checkbox  my-auto">
+    </div>
+  </div>
+      <article class="media content-section" style="background: rgba(253,251,251,.9); width:90%">
+        <div class="media-body">
+          <div class="container">
+            <div class="row">
+            <div class="mr-auto row">
+              <label>UserName</label>:{{ m['username'] }}
+            </div>
+          </div>
+            <div class="row">
+            <div class="mr-auto row">
+              <label>Email</label>:{{ m['email'] }}
+            </div>
+            </div>
+            <div class="row">
+              <div class="mr-auto row">
+                <label>Role</label>:{{ m['role'] }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+    {%else%}
+    <div class="row container">
+    <div class="media content-section bg-danger" >
+      <div class="checkbox my-auto">
+      </div>
+    </div>
+        <article class="media content-section" style="background: rgba(253,251,251,.9); width:90%">
+          <div class="media-body">
+            <div class="container">
+              <div class="row">
+              <div class="mr-auto row">
+                <label>UserName</label>:{{ m['username'] }}
+              </div>
+            </div>
+              <div class="row">
+              <div class="mr-auto row">
+                <label>Email</label>:{{ m['email'] }}
+              </div>
+              </div>
+              <div class="row">
+                <div class="mr-auto row">
+                  <label>Role</label>:{{ m['role'] }}
+                </div>
+                  <div class="row">
+                    <form action="{{url_for('updateuser2c', user_name =m['email'])}}" method="post">
+                      <input type="submit" class="btn btnuhr btn-sm bg-info" id="chusrole2c" value="Change User role to customer">
+                    </form>
+                      <form action="{{url_for('updateuser2k', user_name =m['email'])}}" method="post">
+                      <input type="submit" class="btn btnuhr btn-sm bg-info" id="chusrole2k" value="Change User role to kitchen">
+                    </form>
+                      <form action="{{url_for('updateuser2d', user_name =m['email'])}}" method="post">
+                      <input type="submit" class="btn btnuhr btn-sm bg-info" id="chusrole2d" value="Change User role to delivery">
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    {%endif%}
+  {% endfor %}
+  </div>
+{% endblock content1 %}

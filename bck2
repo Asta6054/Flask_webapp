@@ -1,0 +1,95 @@
+from flask import Flask, render_template, url_for, flash, redirect, request, session, g
+from flask_pymongo import PyMongo
+from forms import ResgistrationForm, LoginForm
+from flask_bcrypt import Bcrypt
+
+app = Flask(__name__)
+
+bcrypt = Bcrypt(app)
+
+app.config['SECRET_KEY'] = '6ed402f8cde8ed26a6bc16a9569dbe6f'
+app.config['MONGO_DBNAME'] = 'project'
+app.config["MONGO_URI"] = "mongodb://Arun6054:Pra1310bvr@ds045622.mlab.com:45622/project"
+mongo = PyMongo(app)
+menu = mongo.db.menu.find({})
+
+@app.route('/')
+def index():
+    return render_template('home.html')
+@app.route('/home')
+def home():
+    posts = mongo.db.menu.find()
+    menu = ''
+
+    menu +=      '  <h1>Welome to MyRestuarnt</h1>'
+    menu +=       ' <p>Open Hours: 10:30AM - 9:00PM</p><br><hr>'
+    for e in posts:
+        menu +=       ' <a href="#">'
+        menu +=        '  <article class="media content-section">'
+        menu +=           ' <div class="media-body">'
+        menu +=              '<div>'
+        menu +=                '<p class="article-content">'+ e['ItemName'] +'</p>'
+        menu +=               ' <label for="">Description</label>:<p class="article-content">'+ e['Description'] +'</p>'
+        menu +=               '<div class="row">'
+        menu +=              ' <div class="ml-3 row">'
+        menu +=                ' <label for="">Price</label>:<p class="article-content">'+ e['Price'] +'</p>'
+        menu +=                 ' </div>'
+        menu +=                  '<div class="ml-5 row">'
+        menu +=                    '<label for="">Time</label>:<p class="article-content">'+ e['Time'] +'</p>'
+        menu +=                  '</div>'
+        menu +=               ' </div>'
+        menu +=              '</div>'
+        menu +=            '</div>'
+        menu +=          '</article>'
+        menu +=        '</a>'
+    return menu
+
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
+
+@app.route('/register', methods=['GET','POST'])
+def register():
+    form = ResgistrationForm()
+    if request.method == 'POST':
+        users = mongo.db.login
+        existing_user = users.find_one({'username' : form.username.data})
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        users.insert({'username' : form.username.data, 'email' : form.email.data, 'password' : hashed_password})
+        flash('Your account has been created! You are now able to log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if request.method == 'POST':
+        session.pop('user', None)
+
+    if form.validate_on_submit():
+        users = mongo.db.login
+        lgin_user = users.find_one({'email' : form.email.data})
+        if lgin_user:
+            if (bcrypt.check_password_hash(lgin_user['password'], form.password.data) is True):
+                next_page = request.args.get('next')
+                session['user'] = form.email.data
+                return redirect(next_page) if next_page else redirect(url_for('home'))
+            else:
+                flash('Login Unsuccessful. Please check email and password', 'danger')
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
+
+
+@app.route("/logout")
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('home'))
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

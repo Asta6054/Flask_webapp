@@ -1,0 +1,113 @@
+from flask import Flask, render_template, url_for, flash, redirect, request, session, g
+from flask_pymongo import PyMongo
+from forms import ResgistrationForm, LoginForm
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, login_required
+import urllib.request,json
+
+app = Flask(__name__)
+
+bcrypt = Bcrypt(app)
+
+app.config['SECRET_KEY'] = '6ed402f8cde8ed26a6bc16a9569dbe6f'
+app.config['MONGO_DBNAME'] = 'project'
+app.config["MONGO_URI"] = "mongodb://Arun6054:Pra1310bvr@ds045622.mlab.com:45622/project"
+mongo = PyMongo(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+@app.route('/')
+def index():
+    return render_template('home.html')
+@app.route('/home')
+def home():
+    posts = mongo.db.menu.find()
+    return render_template('home.html', posts=posts)
+
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
+
+@app.route('/register', methods=['GET','POST'])
+def register():
+    form = ResgistrationForm()
+    if request.method == 'POST':
+        users = mongo.db.login
+        existing_user = users.find_one({'email' : form.email.data})
+    if form.validate_on_submit():
+        if existing_user:
+            flash('That email is taken. Please choose a different one.')
+        else:
+            googleapikey = "AIzaSyA2TMNF1bewLerQgvelJwKPu1xkAMZbz7c"
+            startLoc= str(Rochester Hills, MI)
+            endLoc = str(Auburn Hills, MI )
+            startLoc = startLoc.replace(' ','+')
+            endLoc = endLoc.replace(' ','+')
+            URL="https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="+startLoc+"&destinations="+endLoc+"&key="+self.googleapikey
+            requestinfo = json.load(urllib.request.urlopen(URL))
+            json_distance = requestinfo['rows'][0]['elements'][0]['distance']
+            if requestinfo['status'] == 'OK':
+                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                users.insert({'username' : form.username.data, 'email' : form.email.data, 'password' : hashed_password})
+                flash('Your account has been created! You are now able to log in', 'success')
+            return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if request.method == 'POST':
+        session.pop('user', None)
+
+    if form.validate_on_submit():
+        users = mongo.db.login
+        lgin_user = users.find_one({'email' : form.email.data})
+        if lgin_user:
+            if (bcrypt.check_password_hash(lgin_user['password'], form.password.data) is True):
+                next_page = request.args.get('next')
+                session['user'] = form.email.data
+                if (lgin_user['role'] == 'admin'):
+                    return redirect(url_for('admin'))
+                if(lgin_user['role'] == 'staff'):
+                    return redirect(url_for('order'))
+                return redirect(next_page) if next_page else redirect(url_for('home'))
+            else:
+                flash('Login Unsuccessful. Please check email and password', 'danger')
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
+
+
+@app.route("/logout")
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('home'))
+
+@app.route("/admin")
+def admin():
+    return render_template('admin.html')
+
+@app.route("/order")
+def order():
+    return render_template('order.html')
+
+@app.route("/admin/menu", methods=['GET', 'POST'])
+@login_required
+def menu():
+    mlab = mongo.db
+    menu = mlab.menu.find()
+    return render_template('menu.html', title='Menu' ,posts=menu)
+
+@app.route("/admin/staff", methods=['GET', 'POST'])
+@login_required
+def staff():
+    mlab = mongo.db
+    members = mlab.login.find()
+    return render_template('user.html', title='Members', post=members)
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

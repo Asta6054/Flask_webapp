@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+  {% if title %}
+  <title>{{ title }}</title>
+  {% else %}
+  <title>Muse</title>
+  {% endif %}
+</head>
+<body class="bg-img" style="background-image: url({{ url_for('static', filename='background/bg1.jpg') }})">
+  <!-- <body> -->
+
+  <header class="site-header" id="topheader">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand font-weight-bold font-italic" style="font-family: Times New Roman, Times, serif" href="{{url_for('admin')}}"> <img class="logo" src="/static/background/logo4.png" height="40">Muse</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse navbar-nv" id="linkpg">
+          <ul class="nav navbar-nav mr-auto">
+            <li><a class="nav-item nav-link text-white nvbrt border-right border-success" href="{{url_for('admin')}}">Home</a></li>
+          </ul>
+        <!-- Navbar Right Side -->
+          <ul class="nav navbar-nav">
+            {% if 'user' in session %}
+            <li><a class="nav-item nav-link text-white nvbrt border-right border-danger" href="{{ url_for('logout') }}">Logout</a></li><hr class="vrline">
+            {% else %}
+            <li><a class="nav-item nav-link text-white nvbrt border-right border-success" href="{{ url_for('login') }}">Login</a></li><hr class="vrline">
+            <li><a class="nav-item nav-link text-white nvbrt border-right border-success" href="{{ url_for('register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+      </div>
+    </nav>
+  </header>
+    <div class="content">
+        <div class="row">
+          <div class="col-3 px-1" id="sidebar" style="background: rgba(0,1,4,.6)">
+            <legend class="text-white border-bottom text-capitalize mt-2 font-italic text-center" style="font-family: Times New Roman, Times, serif">Functions</legend>
+            <div class="btn-group-vertical my-auto" role="group" aria-label="First group" id="pills-tab" role="tablist">
+              <input class="btn btnhr" type="button"  onclick="window.location.href='{{url_for('menu')}}'" value="Remove items from menu">
+              <input class="btn btnhr" type="button"  onclick="window.location.href='{{url_for('addmenu')}}'" value="Add items to menu">
+              <input class="btn btnhr" type="button"  onclick="window.location.href='{{url_for('staff')}}'" value="View/Modify user">
+              <input class="btn btnhr" type="button"  onclick="window.location.href='{{url_for('aoverwatch')}}'" value="View Status">
+            </div>
+          </div>
+          <div class="col offset-3">
+            {% with messages = get_flashed_messages(with_categories=true)%}
+            {%if messages%}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{message}}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+                <div>
+                {% block content1 %}{% endblock %}
+                </div>
+          </div>
+        </div>
+    </div>
+  <footer class="footer">
+    <div class="text-white text-center col">
+      <div>
+        <p> Copyright © MyRestaurant Plugin 2018. All right reserved. </p>
+      </div>
+    </div>
+  </footer>
+  <!--/.footer-->
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>

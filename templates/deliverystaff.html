@@ -1,0 +1,95 @@
+{% extends "stafflayout.html" %}
+{% block content2 %}
+<div class="row container mt-4 mb-4 pt-3" style="background: rgba(0,1,4,.6)">		   
+	
+  <article class="media content-section col-4" style="background: rgba(253,251,251,.8)">
+	  <div class="media-body">
+	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
+	  		READY FOR DELIVERY
+	  	</p>
+	  	{% for e in Rorder %}
+	  	 <div class="card" style="background: rgba(0,0,0,0)" >
+	  	   <p class="article-content" style="font-size: 12px">OrderId:{{ e['OrderId']}} <br>ItemId:{{ e['ItemId']}} <br> DeliveryTime:{{ e['DeliveryTime']}} <br>TotalPrice:{{ e['TotalPrice']}}
+           </p>
+          <div class="row container">
+
+	      <a href="{{ url_for('toout', order_id = e['OrderId'])}}" class="btn btnuhr btn-small bg-info col-9 " style="font-size: 10px">Move To Out For Delivery</a>
+	  	  </div>
+	  	 </div>
+        {% endfor %}
+        
+       </div>
+	  	
+	  
+	</article>
+	<article class="media content-section col-4" style="background: rgba(253,251,251,.8)">
+	  <div class="media-body">
+	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
+	  		OUT FOR DELIVERY
+	  	</p>
+	    {% for e in Oorder %}
+	  	 <div class="card" style="background: rgba(0,0,0,0)" >
+	  	   <p class="article-content" style="font-size: 12px">OrderId:{{ e['OrderId']}} <br>ItemId:{{ e['ItemId']}} <br>  DeliveryTime:{{ e['DeliveryTime']}} <br>TotalPrice:{{ e['TotalPrice']}}
+           </p>
+           <div class="row container">
+            <a href="{{ url_for('todone', order_id = e['OrderId'])}}"  class="btn btnuhr btn-small bg-info col-7" style="font-size: 10px">Move To Completed</a>
+            <p class="col-4 counter" style="font-size: 10px" id="{{ e['OrderId']}}">{{e['DeliveryTime']}}</p> 
+           </div>
+          </div>
+        {% endfor %}
+	  </div>
+	</article>
+		
+	<article class="media content-section col-4" style="background: rgba(253,251,251,.8)">
+	  <div class="media-body">
+	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
+	  		COMPLETED
+	  	</p>
+	    {% for e in Dorder %}
+	  	 <div class="card" style="background: rgba(0,0,0,0)" >
+	  	   <p class="article-content" style="font-size: 12px">OrderId:{{ e['OrderId']}} <br>ItemId:{{ e['ItemId']}} <br> DeliveryTime:{{ e['DeliveryTime']}} <br>TotalPrice:{{ e['TotalPrice']}}
+           </p>
+         </div>
+        {% endfor %}
+	  </div>
+	  
+	</article>
+
+
+            
+
+	<script type="text/javascript">
+	times = []
+	function startTimer() {
+	    
+	    setInterval(function () {
+
+	    	var data = document.getElementsByClassName("counter");
+			for (i=0; i<times.length; i++){
+				times[i] = times[i] - 1;
+	        	var min = parseInt(times[i]/60)+1;
+	    		if (min<=0){
+	    			data[i].innerHTML = "time is up";
+	    		}else{
+	    			data[i].innerHTML = min+" min left";
+	    		}
+			}
+	                 
+	    }, 1000);
+	}
+
+	window.onload = function () {
+		var data = document.getElementsByClassName("counter");
+		for (i=0; i<data.length; i++){
+			num = data[i].innerHTML;
+			times[i] = parseInt(num.split(" ")[0])*60;
+		}
+	    startTimer();
+	};
+		
+		
+	</script>
+
+   
+ </div>
+{% endblock content2 %}

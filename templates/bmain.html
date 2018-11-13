@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4 mb-5 pb-5" style="background: rgba(0,1,4,.6)">
+<br>
+<div class="container text-center">
+  <h1 class="text-white display-2 font-italic" style="font-family: Times New Roman, Times, serif">Welcome</h1>
+  <h5 class="text-white font-italic" style="font-family: Times New Roman, Times, serif">Take a tour of a restaurant experience that is designed to shift your perspective to something refreshing and unexpected.  We pride ourselves on the quality and approach in our food choices.  While our menu may appear to be straightforward or derivative, we have dialed back the true characteristics our food exudes when imbibed.  Upon your first sampling of our offerings, be prepared to be inspired.</h5><br>
+  <div class="text-center mx-auto">
+    <img height="400"src="/static/background/intro.png" alt=""><br><br>
+    <h1 class="text-white display-4 font-italic mr-4" style="font-family: Times New Roman, Times, serif">Muse</h1>
+    <p class="text-white font-italic mr-4" style="font-family: Times New Roman, Times, serif">Open Hours: 10:30AM - 9:00PM</p><br>
+  </div>
+</div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-block p-3" style="background: rgba(0,68,68,0.3)">
+                        <h4 class="card-title text-capitalize font-italic">Menu</h4>
+                        <p class="card-text">Click Open to view menu.</p>
+                        <a href="{{ url_for('home') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-block p-3" style="background: rgba(0,68,68,0.3)">
+                        <h4 class="card-title text-capitalize font-italic">Login</h4>
+                        <p class="card-text">Click Open to Login.</p>
+                        <a href="{{ url_for('login') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-block p-3" style="background: rgba(0,68,68,0.3)">
+                        <h4 class="card-title text-capitalize font-italic">Register</h4>
+                        <p class="card-text">Click Open to Register.</p>
+                        <a href="{{ url_for('register') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Card -->
+{% endblock content %}

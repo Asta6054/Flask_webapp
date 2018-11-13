@@ -1,0 +1,8 @@
+{% extends "stafflayout.html" %}
+{% block content2 %}
+{%if session['role'] == 'kitchen'%}
+<h1 class="text-white">Kitchen</h1>
+{%else%}
+<h1 class="text-white">Delivery</h1>
+{%endif%}
+{% endblock content2 %}

@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid mt-4 mb-5 pb-5" style="background: rgba(0,1,4,.6)">
+  <br>
+  <legend class="border-bottom text-white font-italic" style="font-family: Times New Roman, Times, serif"><h1 class="font-weight-bold text-white">Cart</h1>
+  </legend>
+  <br>
+  <div class="container text-center mx-auto">
+  </div>
+  <hr>
+  {% if 'user' in session %}
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active " id="pills-RCD" role="tabpanel" aria-labelledby="pills-RCD-tab">
+        <div>
+          <div class="row container mx-auto">
+            <article class="media content-section col" style="background: rgba(253,251,251,.9)">
+              <div class="media-body">
+                  <p class="article-content"> {%for v in posts%}{{ v }}{% endfor %}</p>
+                   <div class="row">
+                    <div class="ml-3 row">
+                    </div>
+                  </div>
+              </div>
+            </article>
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active " id="pills-RCD" role="tabpanel" aria-labelledby="pills-RCD-tab">
+      <div>
+        <div class="row container mx-auto">
+          <article class="media content-section col" style="background: rgba(253,251,251,.9)">
+            <div class="media-body">
+                <p class="article-content">{{ session['dict'] }}</p>
+                 <div class="row">
+                  <div class="ml-3 row">
+                  </div>
+                </div>
+            </div>
+          </article>
+        </div>
+      </div>
+  </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}

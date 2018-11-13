@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container container mt-4 mb-5 pb-5" style="background: rgba(0,1,4,.6)">
+  <legend class="border-bottom text-white text-center font-italic" style="font-family: Times New Roman, Times, serif"><h1 class="font-weight-bold text-white">Welcome to Muse</h1>
+  <p>Open Hours: 10:30AM - 9:00PM</p>
+  </legend>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top" style="height: 15rem; object-fit: cover" src="/static/background/img8.jpg" alt="Card image cap">
+                    <div class="card-block p-3">
+                        <h4 class="card-title text-capitalize font-italic">Menu</h4>
+                        <p class="card-text">Click Open to view menu.</p>
+                        <a href="{{ url_for('home') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top" style="height: 15rem; object-fit: cover" src="/static/background/img4.jpg" alt="Card image cap">
+                    <div class="card-block p-3">
+                        <h4 class="card-title text-capitalize font-italic">View Current Orders</h4>
+                        <p class="card-text">Click Open to view Current Orders.</p>
+                        <a href="#" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top" style="height: 15rem; object-fit: cover" src="/static/background/img3.jpg" alt="Card image cap">
+                    <div class="card-block p-3">
+                        <h4 class="card-title text-capitalize font-italic">Order History</h4>
+                        <p class="card-text">Click Open to view Order History.</p>
+                        <a href="#" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Card -->
+{% endblock content %}
