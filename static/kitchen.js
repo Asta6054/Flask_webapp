@@ -38,7 +38,7 @@ $("document").ready(function() {
 
 function cooking(o_id,ct,or_id) {
   var coutput = '';
-  coutput += '<div id="cookt'+o_id+'">'
+  coutput += '<div id="cookt'+or_id+'">'
   coutput += '<article class="media content-section col">';
   coutput += '<div class="media-body">';
   coutput += '<div class="well">';
@@ -48,7 +48,7 @@ function cooking(o_id,ct,or_id) {
   coutput += '<a class="btn btn-outline-primary" data-id="'+o_id+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
   coutput += '</div>';
   coutput += '<div class="col">';
-  coutput += '<p>Cook Time: <span id="time'+o_id+'" onload=starttimer()>00:00</span>';
+  coutput += '<p>Cook Time: <span id="time'+or_id+'" onload=starttimer()>00:00</span>';
   coutput += '</p>';
   coutput += '</div>';
   coutput += '</div>';
@@ -60,13 +60,13 @@ function cooking(o_id,ct,or_id) {
   coutput += '</article>';
   coutput += '</div>';
   $('#cooking').append(coutput);
-  starttimer(ct,o_id);
+  starttimer(ct,or_id);
 }
-function starttimer(ti,oid) {
+function starttimer(ti,orid) {
   //  var text = parseInt(data.CookTime);
   var st = ti.toString();
   var ct = 60 * ti,
-  display = document.querySelector('#time'+oid+'');
+  display = document.querySelector('#time'+orid+'');
   timer(ct, display);
 }
 function timer(duration, display) {
@@ -128,7 +128,7 @@ function done(e){
   data: JSON.stringify({ "_id" : { "$oid": USid }, "OrderId" : ORid ,  "ItemId" : ITid }),
   type: "POST",
   contentType: "application/json" } );
-    $('#cookt'+USid+'').empty();
+    $('#cookt'+ORid+'').empty();
 }
 
 function pending() {
@@ -141,7 +141,7 @@ function pending() {
       console.log(data);
       if(data.status == "pending"){
         console.log(data.Itemlist.length);
-      output +=  '<div id="pend'+data._id.$oid+'">';
+      output +=  '<div id="pend'+data.OrderId+'">';
       output += '<article class="media content-section col">';
       output += '<div class="media-body">';
       output += '<div class="well">';
@@ -178,7 +178,7 @@ function pending() {
     orderID = or_id;
     ins(o_id);
     // del(o_id);
-    $('#pend'+o_id+'').empty();
+    $('#pend'+or_id+'').empty();
     cooking(o_id,ct,or_id);
     // refresh(ct);
   }
@@ -217,7 +217,7 @@ function pending() {
       $.each(data, function(key, data){
         console.log(data);
           if(data.status == "pending"){
-        output +=  '<div id="pend'+data._id.$oid+'">';
+        output +=  '<div id="pend'+data.OrderId+'">';
         output += '<article class="media content-section col">';
         output += '<div class="media-body">';
         output += '<div class="well">';
