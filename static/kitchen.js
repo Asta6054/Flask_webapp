@@ -104,15 +104,14 @@ $.ajax({
           var itemid = data.Itemlist[i].Itemname;
           console.log(itemid);
           var qnty = data.Itemlist[i].Qty;
-           ItemL += '<div class="row">';
-           ItemL += '<div class="col">';
+           ItemL += '<tr>';
+           ItemL += '<td>';
            ItemL += itemid;
-           ItemL += '</div>';
-           ItemL += '<div class="col justify-content-end">';
-           ItemL += "Qty: "+qnty;
-           ItemL += '</div>';
-           ItemL += '</div>';
-           ItemL += '<br>';
+           ItemL += '</td>';
+           ItemL += '<td>';
+           ItemL +=  qnty;
+           ItemL += '</td>';
+           ItemL += '</tr>';
           $('#list-form').html(ItemL);
         }
   }

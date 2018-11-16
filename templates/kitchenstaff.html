@@ -1,46 +1,60 @@
 {% extends "stafflayout.html" %}
 {% block content2 %}
-<div class="row container mt-4 mb-4 pt-3" id="parent" style="background: rgba(0,1,4,.6)">
+<div class="row container mx-auto mt-4 mb-4 pt-3" id="parent" style="background: rgba(0,1,4,.6)">
 
   <article class="media content-section col-6">
-	  <div class="media-body">
+    <div class="media-body">
       <div class="container">
         <div class="row">
           <legend>
             <p class="text-center font-Times col border-bottom" style="font-family: Times New Roman, Times, serif";>
-      	  		PENDING
-      	  	</p>
+              PENDING
+            </p>
           </legend>
-            <input class="btn btn-sm btn-primary col" style="border-radius: 50px" type="button" onclick="refreshpending()"name="refresher" value="Check for Orders">
+          <input class="btn btn-sm btn-primary col" style="border-radius: 50px" type="button" onclick="refreshpending()"name="refresher" value="Check for Orders">
         </div>
       </div>
       <br>
       <div id="pending">
 
       </div>
-       </div>
-	</article>
-	<article class="media content-section col-6">
-	  <div class="media-body">
+    </div>
+  </article>
+  <article class="media content-section col-6">
+    <div class="media-body">
       <legend>
         <p class="text-center border-bottom font-Times" style="font-family: Times New Roman, Times, serif";>
-  	  		COOKING
-  	  	</p>
+          COOKING
+        </p>
       </legend>
-	    <div id="cooking">
+      <div id="cooking">
 
-	    </div>
-	  </div>
+      </div>
+    </div>
 
-	</article>
- </div>
- <div class="bg-modal" style="background-color: rgba(0, 0, 0,0.7); width: 100%; height: 100%; position: absolute; top: 0; display: none; justify-content: center; align-items: center">
- <div class="modal-contents" style="height: 300px;	width: 500px;	background-color: white;	text-align: center;	padding: 20px;	position: relative;	border-radius: 4px">
- <div class="close" style="position: absolute; top: 0; right: 10px; font-size: 42px; color: #333; transform: rotate(45deg); cursor: pointer">+</div>
- <div class="container" id="list-form">
-
- </div>
+  </article>
 </div>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="bg-modal" style="background-color: rgba(0, 0, 0,0.7); height: 100%;	width: 90%; position: absolute; top: 0; display: none; justify-content: center; align-items: center">
+      <div class="modal-contents mx-auto my-4" style="height: 80%;	width: 60%;	background-color: white;	text-align: center;	padding: 20px;	position: relative;	border-radius: 4px">
+        <div class="close" style="position: absolute; top: 0; right: 10px; font-size: 42px; cursor: pointer"><img class="logo" height="40" src="/static/background/close.svg"/></div><br>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Item Name</th>
+              <th scope="col">Quantity</th>
+            </tr>
+          </thead>
+          <tbody id="list-form">
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>
- <script src="/static/kitchen.js"></script>
+
+<script src="/static/kitchen.js"></script>
 {% endblock content2 %}
