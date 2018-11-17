@@ -124,9 +124,9 @@ function done(e){
   ITid = $(e).attr("data-itemid");
   CTid = $(e).attr("data-cooktime");
   USid = $(e).attr("data-uid");
-  $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/Dorder?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
-  data: JSON.stringify({ "_id" : { "$oid": USid }, "OrderId" : ORid ,  "ItemId" : ITid }),
-  type: "POST",
+  $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + o_id + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
+  data: JSON.stringify({ "$set" : { "status" : "RFD" } }),
+  type: "PUT",
   contentType: "application/json" } );
     $('#cookt'+ORid+'').empty();
 }
