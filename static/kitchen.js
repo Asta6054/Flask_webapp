@@ -124,7 +124,7 @@ function done(e){
   ITid = $(e).attr("data-itemid");
   CTid = $(e).attr("data-cooktime");
   USid = $(e).attr("data-uid");
-  $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + o_id + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
+  $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + USid + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
   data: JSON.stringify({ "$set" : { "status" : "RFD" } }),
   type: "PUT",
   contentType: "application/json" } );
@@ -149,11 +149,6 @@ function pending() {
       output +=  '<p> CookTime: ' + data.CookTime + '</p>';
       output +=  '</div>';
       output +=  '<div class="row container">';
-      for(var i = 0; i < data.Itemlist.length; i++){
-        var itemid = data.Itemlist[i].Itemname;
-        var qnty = data.Itemlist[i].Qty;
-        console.log(itemid +"----"+" Qty:"+qnty);
-      }
       output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-cooktime="'+data.CookTime+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">Move To Cooking</a>';
       output +=  '</div>';
       output +=  '</div>';
