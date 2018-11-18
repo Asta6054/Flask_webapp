@@ -8,8 +8,15 @@
 	  	</p>
 	  	{% for e in order %}
 	  	 <div class="card" style="background: rgba(0,0,0,0)" >
-	  	  <p class="article-content" style="font-size: 12px">OrderId:{{ e['OrderId']}} <br>ItemId:{{ e['ItemId']}} <br> ETA:{{ e['ETA']}}
-          </p>
+         <article class="media content-section col">
+           <div class="media-body">
+             <div class="well">
+               <h3>OrderId: {{ e['OrderId']}} </h3>
+               <p>CookTime: {{ e['ETA']}}</p>
+               <p>ItemId: {{ e['ItemId']}}</p>
+             </div>
+           </div>
+         </article>
 	  	  </div>
         {% endfor %}
        </div>
@@ -21,8 +28,15 @@
 	  	</p>
 	    {% for e in Corder %}
 	  	 <div class="card" style="background: rgba(0,0,0,0)" >
-	  	  <p class="article-content" style="font-size: 12px">OrderId:{{ e['OrderId']}} <br>ItemId:{{ e['ItemId']}} <br> ETA:{{ e['ETA']}}
-          </p>
+         <article class="media content-section col">
+           <div class="media-body">
+             <div class="well">
+               <h3>OrderId: {{ e['OrderId']}} </h3>
+               <p>CookTime: {{ e['ETA']}}</p>
+               <p>ItemId: {{ e['ItemId']}}</p>
+             </div>
+           </div>
+         </article>
 	  	  </div>
         {% endfor %}
 	  </div>

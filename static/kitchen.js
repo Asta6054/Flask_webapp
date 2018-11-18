@@ -98,7 +98,6 @@ $.ajax({
 }).done(function(data) {
   var ItemL = '';
   $.each(data, function(key, data){
-    console.log(data.Itemlist.length);
       if(data.status == "cooking" && data._id.$oid == oid ){
         for(var i = 0; i < data.Itemlist.length; i++){
           var itemid = data.Itemlist[i].Itemname;
