@@ -38,17 +38,16 @@ $("document").ready(function() {
 
 function cooking(o_id,ct,or_id) {
   var coutput = '';
-  coutput += '<div id="cookt'+or_id+'">'
-  coutput += '<article class="media content-section col">';
+  coutput += '<div class="media content-section" id="cookt'+or_id+'">'
   coutput += '<div class="media-body">';
-  coutput += '<div class="well">';
+  coutput += '<div class="well mx-auto">';
   coutput += '<h3>Order Number: '+ or_id + '</h3>';
   coutput += '<div class="row">';
   coutput += '<div class="col mr-auto">';
   coutput += '<a class="btn btn-outline-primary" data-id="'+o_id+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
   coutput += '</div>';
   coutput += '<div class="col">';
-  coutput += '<p>Cook Time: <span id="time'+or_id+'" onload=starttimer()>00:00</span>';
+  coutput += '<p>Cook Time: <span class="blink" id="time'+or_id+'" onload=starttimer()>00:00</span>';
   coutput += '</p>';
   coutput += '</div>';
   coutput += '</div>';
@@ -57,7 +56,6 @@ function cooking(o_id,ct,or_id) {
   coutput += '<button class="btn btn-sm btn-success col" style="border-radius: 50px" data-cooktime="'+ct+'" data-orderid="'+or_id+'" data-uid="'+o_id+'" id="orderdone" onclick="done(this)">Done</button>';
   coutput += '</div>';
   coutput += '</div>';
-  coutput += '</article>';
   coutput += '</div>';
   $('#cooking').append(coutput);
   starttimer(ct,or_id);
@@ -66,25 +64,63 @@ function starttimer(ti,orid) {
   //  var text = parseInt(data.CookTime);
   var st = ti.toString();
   var ct = 60 * ti,
-  display = document.querySelector('#time'+orid+'');
-  timer(ct, display);
+  display = document.querySelector('#time'+orid+''),
+  od = document.querySelector('#cookt'+orid);
+  timer(ct, display, od, orid);
 }
-function timer(duration, display) {
+function timer(duration, display, od, orid) {
   var timer = duration, minutes, seconds;
   setInterval(function () {
     minutes = parseInt(timer / 60, 10)
     seconds = parseInt(timer % 60, 10);
 
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    display.textContent = minutes + ":" + seconds +" Mins Left";
+   if (minutes < 0 && seconds < 0) {
+      minutes = parseInt(timer / 60, 10)
+      seconds = Math.abs(parseInt(timer % 60, 10));
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+    }else if (minutes == 0 && seconds < 0) {
+      minutes = parseInt(timer / 60, 10)
+      seconds = Math.abs(parseInt(timer % 60, 10));
+
+      minutes = minutes < 10 ? "-0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+    }else {
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+    }
+
+    if (minutes == 1) {
+      od.style.border = "thick solid yellow";
+      display.textContent = minutes + ":" + seconds +" Mins Left";
+    }else if (minutes <= 0) {
+      od.style.border = "thick solid red";
+      setInterval(blink_text(orid), 1000);
+      display.style.color = "red";
+      display.textContent = minutes + ":" + seconds +" Mins Left";
+    }else {
+      od.style.border = "thick solid green";
+      display.textContent = minutes + ":" + seconds +" Mins Left";
+    }
     cTime = minutes + ":" + seconds;
-
-    if (--timer < 0) {
-      timer = 0;
+    if (minutes < 0) {
+      od.style.border = "thick solid red";
+      setInterval(blink_text(orid), 1000);
+      display.style.color = "red";
+      display.textContent = minutes + ":" + seconds +" Mins Left";
+    }
+    if (--timer < -5) {
+      clearInterval();
     }
   }, 1000);
+}
+
+
+function blink_text(orid) {
+    $('#time'+orid+'').fadeOut(500);
+    $('#time'+orid+'').fadeIn(500);
 }
 
 function itemLIST(e) {

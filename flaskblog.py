@@ -496,9 +496,11 @@ def main():
 def aoverwatch():
     if g.role == 'admin':
         mlab = mongo.db
-        order=mlab.order.find()
-        Corder=mlab.Corder.find()
-        return render_template('aoverwatch.html', order=order,Corder=Corder)
+        order=mlab.order.find({'status':'pending'})
+        Corder=mlab.order.find({'status':'cooking'})
+        rorder=mlab.order.find({'status':'RFD'})
+        Coorder=mlab.order.find({'status':'DC'})
+        return render_template('aoverwatch.html', order=order,Corder=Corder, rorder=rorder,Coorder=Coorder)
     else:
         session.pop('user', None)
         session.pop('role', None)

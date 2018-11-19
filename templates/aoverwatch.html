@@ -7,7 +7,7 @@
 	  		PENDING
 	  	</p>
 	  	{% for e in order %}
-	  	 <div class="card" style="background: rgba(0,0,0,0)" >
+	  	 <div style="background: rgba(0,0,0,0)" >
          <article class="media content-section col">
            <div class="media-body">
              <div class="well">
@@ -27,7 +27,47 @@
 	  		COOKING
 	  	</p>
 	    {% for e in Corder %}
-	  	 <div class="card" style="background: rgba(0,0,0,0)" >
+	  	 <div style="background: rgba(0,0,0,0)" >
+         <article class="media content-section col">
+           <div class="media-body">
+             <div class="well">
+               <h3>OrderId: {{ e['OrderId']}} </h3>
+               <p>CookTime: {{ e['ETA']}}</p>
+               <p>ItemId: {{ e['ItemId']}}</p>
+             </div>
+           </div>
+         </article>
+	  	  </div>
+        {% endfor %}
+	  </div>
+	</article>
+  <article class="media content-section col" style="background: rgba(253,251,251,.8)">
+	  <div class="media-body">
+	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
+	  		READY FOR DELIVERY
+	  	</p>
+	  	{% for e in rorder %}
+	  	 <div style="background: rgba(0,0,0,0)" >
+         <article class="media content-section col">
+           <div class="media-body">
+             <div class="well">
+               <h3>OrderId: {{ e['OrderId']}} </h3>
+               <p>CookTime: {{ e['ETA']}}</p>
+               <p>ItemId: {{ e['ItemId']}}</p>
+             </div>
+           </div>
+         </article>
+	  	  </div>
+        {% endfor %}
+       </div>
+	</article>
+	<article class="media content-section col" style="background: rgba(253,251,251,.8)">
+	  <div class="media-body">
+	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
+	  		COMPLETED
+	  	</p>
+	    {% for e in Coorder %}
+	  	 <div style="background: rgba(0,0,0,0)" >
          <article class="media content-section col">
            <div class="media-body">
              <div class="well">
