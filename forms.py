@@ -16,6 +16,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
+class AccupdateForm(FlaskForm):
+    Address = StringField('Address', validators=[DataRequired(), Length(min=10, message="Enter Valid Address")])
+    submit = SubmitField('Update')
+    Telephone = StringField('Telephone', validators=[DataRequired(), Regexp('(^[+0-9]{1,3})*([0-9]{10,11}$)', message="Enter Valid Phone Number")])
 
 class MenuForm(FlaskForm):
     cateogry = SelectField(

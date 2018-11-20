@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, flash, redirect, request, session, g
 from flask_pymongo import PyMongo
-from forms import RegistrationForm, LoginForm, MenuForm
+from forms import RegistrationForm, LoginForm, MenuForm, AccupdateForm
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_required
 import json
@@ -380,6 +380,54 @@ def updateuser2k(user_name):
         session.pop('role', None)
         return redirect(url_for('login'))
 
+
+@app.route("/updateuserform")
+def acupdateform():
+    if g.role == 'customer':
+        return render_template('main.html')
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+
+@app.route("/updateuserdetails", methods=['GET','POST'])
+def acupdate():
+    if g.role == 'customer':
+        form = AccupdateForm()
+        if request.method == 'POST':
+            users = mongo.db.login
+            existing_user = users.find_one({'email' : session['user']})
+            print(existing_user)
+            if form.validate_on_submit():
+                    api=googleapi()
+                    addr = form.Address.data
+                    jdata = api.get(addr)
+                    timemd = jdata['rows'][0]['elements'][0]['duration']
+                    time = timemd['text'].split(' ')
+                    time = time[0]
+                    distancemd = jdata['rows'][0]['elements'][0]['distance']
+                    distance = distancemd['text'].split(' ')
+                    distance = distance[0]
+                    if jdata['status'] == 'OK':
+                        if float(distance) <= float(15):
+                            existing_user['telephone'] = form.Telephone.data
+                            existing_user['address'] = form.Address.data
+                            existing_user['distance'] = distance
+                            existing_user['ETA'] = time
+                            users.save(existing_user)
+                            flash('Your account has been created! You are now able to place orders', 'success')
+                        else:
+                            flash('destination location crossed 15 miles delivery limit!. Please change address', 'danger')
+                    else:
+                        print (jdata['status'])
+                        return jdata['status']
+                    return redirect(url_for('main'))
+        return render_template('accform.html', title='Account', form=form)
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+
 @app.route("/kitchenhomepage")
 def kitchen():
     if g.role == 'kitchen':
@@ -478,6 +526,21 @@ def todone(order_id):
                 Dordermd.insert(o1found)
                 Oordermd.remove(o1found)
             return redirect(url_for('delivery'))
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+
+@app.route("/useraccount", methods=['GET','POST'])
+def useraccountpage():
+    if g.role == 'customer':
+        users = mongo.db.login
+        members = users.find_one({'email' : session['user']})
+        username = members['username']
+        email = members['email']
+        address = members['address']
+        contact = members['telephone']
+        return render_template('account.html',username = username, email = email, address = address, contact = contact)
     else:
         session.pop('user', None)
         session.pop('role', None)

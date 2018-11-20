@@ -6,8 +6,6 @@ html {
   background-color: rgb(253,247,223);
 }
 
-@keyframes blink { 50% { border-color:red; }  }
-
 .content {
   margin-top: 5rem;
   flex: 1 0 auto;

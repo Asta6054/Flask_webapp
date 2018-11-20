@@ -105,14 +105,14 @@ function timer(duration, display, od, orid) {
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }
     cTime = minutes + ":" + seconds;
-    if (minutes < 0) {
+    if (minutes <= -1) {
       od.style.border = "thick solid red";
       setInterval(blink_text(orid), 1000);
       display.style.color = "red";
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }
-    if (--timer < -5) {
-      clearInterval();
+    if (--timer < -301) {
+        timer = -301;
     }
   }, 1000);
 }

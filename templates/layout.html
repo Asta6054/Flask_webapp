@@ -46,6 +46,7 @@
         <!-- Navbar Right Side -->
           <ul class="nav navbar-nav">
           {% if 'user' in session %}
+          <li><a href="{{url_for('useraccountpage')}}"><img class="logo" height="45" src="/static/background/ua2.png"/><p id="uaname" class="badge text-white">{{session['user']}}</p></a></li>
           <li><a class="nav-item nav-link text-white nvbrt border-right border-danger" href="{{ url_for('logout') }}">Logout</a></li><hr class="vrline">
           <li><a href="{{url_for('orderreviewpage')}}"><img class="logo" height="40" src="/static/background/cart3.svg"/><p id="message_count" class="badge text-white">{% if 'count' in session %} {{session['count']}} {% else %} {{session['count']}} {% endif %}</p></a></li>
           {% else %}
