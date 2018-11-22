@@ -138,6 +138,7 @@
       </div>
       <div class="container">
         <div id='review_addr'></div><br>
+        <div id="review_ETA"></div><br>
         <div class="row">
           <div class="col-6">
             <div id='review_price'></div>
@@ -203,12 +204,6 @@
 
   }
 
-  function ins() {
-    $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
-    data: JSON.stringify({"ItemId": item_str,'TotalPrice' : "$"+price, 'CookTime' : cook_time}),
-    type: "POST",
-    contentType: "application/json" } );
-  }
 
   function cart(target){
     eles = target.split("$")
@@ -250,6 +245,7 @@
       // data: "formname="+formname+"&status="+status,
       success: function(res){
           var obj = JSON.parse(res);
+          var num = parseInt(obj.time)+(parseInt(obj.distanceETA)+5);
           alert("Thank you for Placing the order.Please wait for the order to be delivered.");
           console.log(obj)
         }

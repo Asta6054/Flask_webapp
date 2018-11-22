@@ -598,25 +598,7 @@ def staff():
 
 @app.route("/review", methods=['GET', 'POST'])
 def reviewAjax():
-    user_email = request.args.get('user')
-    # print (user_email)
-    user = mongo.db.login.find_one({'email' : user_email})
-    # print (user['address'])
-    return json.dumps({'status':'OK','address':user['address'],'$oid':user['email'],'distanceETA':user['ETA']});
-
-
-
-@app.route("/upload_menu", methods=['GET','POST'])
-def upload_m():
-
-
     info = request.args.get("info")
-    print(info)
-    price = request.args.get("price")
-    print(price)
-    username = request.args.get("username")
-    print(username)
-
     items = info.split(";")[:-1]
     item_str = []
     qty = ""
@@ -670,12 +652,85 @@ def upload_m():
         item_dic['Qty'] = num
         item_str2.append(item_dic)
 
-    cook_time ="%d mins" % (max(time_list))
+    cook_time ="%d" % (max(time_list))
     print (time_list, "max:", cook_time)
-    order.insert_one({"Uid": username, "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : cook_time,'status:' : order_status})
+    user_email = request.args.get('user')
+    # print (user_email)
+    user = mongo.db.login.find_one({'email' : user_email})
+    return json.dumps({'status':'OK','time':cook_time, 'address':user['address'], 'distanceETA' : user['ETA']});
+
+
+
+@app.route("/upload_menu", methods=['GET','POST'])
+def upload_m():
+
+
+    info = request.args.get("info")
+    print(info)
+    price = request.args.get("price")
+    print(price)
+    username = request.args.get("username")
+    print(username)
+    user = mongo.db.login.find_one({'email' : username})
+    items = info.split(";")[:-1]
+    item_str = []
+    qty = ""
+    time_list = []
+    order_status = "pending"
+    menu1 = mongo.db.menu1
+    menu2 = mongo.db.menu2
+    menu3 = mongo.db.menu3
+
+    print(len(items))
+    for item in items:
+        print(item)
+        (name, num) = item.split(",")
+        if True:
+            try:
+                res = menu1.find_one({'ItemName': name})
+                time_list.append(int(res["Time"].split(" ")[0]))
+        #     # print (res["Time"])
+                item_str.append(name+"*"+num+";")
+
+            except:
+                print ("not in 1")
+            try:
+        # elif (name == menu2.find_one({'ItemName': name})):
+                res = menu2.find_one({'ItemName': name})
+                time_list.append(int(res["Time"].split(" ")[0]))
+
+                item_str.append(name+"*"+num+";")
+            except:
+                print ("not in 2")
+        # elif (name == menu3.find_one({'ItemName': name})):
+            try:
+                res = menu3.find_one({'ItemName': name})
+                time_list.append(int(res["Time"].split(" ")[0]))
+                item_str.append(name+"*"+num+";")
+            except:
+                print ("not in 3")
+
+
+    order = mongo.db.order
+    count_order = order.find().count() + 1
+    print ("order:", count_order)
+
+    print("$$",time_list)
+
+    item_str2 = []
+    for item in items:
+        item_dic = {}
+        (name, num) = item.split(",")
+        item_dic['Itemname'] = name
+        item_dic['Qty'] = num
+        item_str2.append(item_dic)
+
+    cook_time ="%d" % (max(time_list))
+    print (time_list, "max:", cook_time)
+    order.insert_one({"Uid": username, "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : cook_time, 'distanceETA' : user['ETA'], 'status:' : order_status})
 
     # return "succ"
-    return json.dumps({'status':'OK', 'time':cook_time});
+    return json.dumps({'status':'OK', 'time':cook_time, 'distanceETA':user['ETA']});
 
 # ---------------------------- ORDER PAGE END ----------------------------
 

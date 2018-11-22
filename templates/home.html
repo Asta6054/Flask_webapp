@@ -206,13 +206,18 @@
     // alert("ab")
     $.ajax({
       type: "POST",
-      url: "/review?user="+user_id,
+      url: "/review?info="+dict_str+"&user="+user_id,
       datatype: 'json',
       // data: "formname="+formname+"&status="+status,
       success: function(res){
           var obj = JSON.parse(res);
           console.log(res);
+          var newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5);
+
           document.getElementById("review_addr").innerHTML = "Your order will be sent to : "+ obj.address;
+
+          document.getElementById("review_ETA").innerHTML = "Estimated Time: "+ newobj;
+
           document.getElementById("review_price").innerHTML = "Total price: $"+ totp;
 
           // var cont = document.getElementById("cart_content").innerHTML;
