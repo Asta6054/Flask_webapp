@@ -67,35 +67,36 @@ function starttimer(ti,orid) {
   display = document.querySelector('#time'+orid+''),
   od = document.querySelector('#cookt'+orid);
   timer(ct, display, od, orid);
+  //alert("After timer");
 }
 function timer(duration, display, od, orid) {
   var timer = duration, minutes, seconds;
-  setInterval(function () {
+  var newt = setInterval(function () {
     minutes = parseInt(timer / 60, 10)
     seconds = parseInt(timer % 60, 10);
 
 
    if (minutes < 0 && seconds < 0) {
-      minutes = parseInt(timer / 60, 10)
+      minutes = Math.abs(parseInt(timer / 60, 10));
       seconds = Math.abs(parseInt(timer % 60, 10));
 
-      minutes = minutes < 10 ? "" + minutes : minutes;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
     }else if (minutes == 0 && seconds < 0) {
-      minutes = parseInt(timer / 60, 10)
+      minutes = Math.abs(parseInt(timer / 60, 10));
       seconds = Math.abs(parseInt(timer % 60, 10));
 
-      minutes = minutes < 10 ? "-" + minutes : minutes;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
     }else {
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
     }
 
-    if (minutes == 1) {
+    if (minutes == 1 ) {
       od.style.border = "thick solid yellow";
       display.textContent = minutes + ":" + seconds +" Mins Left";
-    }else if (minutes <= 0) {
+    }else if (minutes < 1) {
       od.style.border = "thick solid red";
       setInterval(blink_text(orid), 1000);
       display.style.color = "red";
@@ -105,14 +106,44 @@ function timer(duration, display, od, orid) {
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }
     cTime = minutes + ":" + seconds;
-    if (minutes <= -1) {
+    console.log(timer);
+    if (--timer < 0) {
+      //alert("F");
+      newtimer(orid);
+      clearInterval(newt);
+
+
+    }
+  }, 1000);
+}
+function newtimer(orid) {
+  var ct = 0,
+  display = document.querySelector('#time'+orid+''),
+  od = document.querySelector('#cookt'+orid);
+  //////////////////////////////////////////
+  //chnaged name of timer function to nntimer as it was confused on function call
+  nntimer(ct, display, od, orid);
+  //alert("second timer");
+}
+function nntimer(duration, display, od, orid) {
+  var timer = duration, minutes, seconds;
+  setInterval(function () {
+    minutes = parseInt(timer / 60, 10)
+    seconds = parseInt(timer % 60, 10);
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+/////////////////////////////////////////////////////
+//chnaged the if check as it was not calling this
+    if (minutes >= 0) {
       od.style.border = "thick solid red";
       setInterval(blink_text(orid), 1000);
       display.style.color = "red";
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }
-    if (--timer < -301) {
-        timer = -301;
+    cTime = minutes + ":" + seconds;
+    if (++timer < 0) {
+      timer = 300;
     }
   }, 1000);
 }

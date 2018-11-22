@@ -12,6 +12,43 @@
 
   <link rel="stylesheet" type="text/css" href="/static/main.css">
 
+  <style type="text/css">
+
+     * {
+        box-sizing: border-box;
+      }
+
+      html,body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      .shopping-cart {
+        width: 750px;
+        height: 500px;
+        margin: 80px auto;
+        background: #FFFFFF;
+        box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+      }
+
+
+      .title {
+      height: 60px;
+      border: 3px solid #495057;
+      background: #f3f9ff;
+      padding: 10px 80px;
+      color: #495057;
+      font-size: 24px;
+      font-weight: bold;
+      }
+
+
+    </style>
+
   {% if title %}
   <title>{{ title }}</title>
   {% else %}
@@ -19,6 +56,17 @@
   {% endif %}
 </head>
 <body class="bg-img" style="background-image: url({{ url_for('static', filename='background/bg1.jpg') }})">
+
+
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </script>
+
+
   <!-- <body> -->
 
   <header class="site-header" id="topheader">
@@ -46,9 +94,9 @@
         <!-- Navbar Right Side -->
           <ul class="nav navbar-nav">
           {% if 'user' in session %}
-          <li><a href="{{url_for('useraccountpage')}}"><img class="logo" height="45" src="/static/background/ua2.png"/><p id="uaname" class="badge text-white">{{session['user']}}</p></a></li>
+          <li><a href="{{url_for('useraccountpage')}}"><img class="logo" height="45" src="/static/background/ua2.png"/><p id="user_id" class="badge text-white">{{session['user']}}</p></a></li>
           <li><a class="nav-item nav-link text-white nvbrt border-right border-danger" href="{{ url_for('logout') }}">Logout</a></li><hr class="vrline">
-          <li><a href="{{url_for('orderreviewpage')}}"><img class="logo" height="40" src="/static/background/cart3.svg"/><p id="message_count" class="badge text-white">{% if 'count' in session %} {{session['count']}} {% else %} {{session['count']}} {% endif %}</p></a></li>
+          <li class="bg-danger" style="border-radius:20px; height:40px " ><a onclick="pop_cart()"><img class="logo" height="40" src="/static/background/cart3.svg"/><div class="bg-danger badge text-white" id='cart_count' style="border-radius: 12px">0</div></a></li>
           {% else %}
           <li><a class="nav-item nav-link text-white nvbrt border-right border-success" href="{{ url_for('login') }}">Login</a></li><hr class="vrline">
           <li><a class="nav-item nav-link text-white nvbrt border-right border-success" href="{{ url_for('register') }}">Register</a></li>
@@ -73,6 +121,36 @@
           </div>
         </div>
     </div>
+
+    <div id = "review" style="display:none; position: fixed; top: 80px; left: 50px; bottom: 100px; background: black; color: #c4e2ff; width:800px; overflow: auto;">
+      <legend class="text-center mt-2 text-info"><p>Order Confirmation</p></legend>
+      <div class="container">
+        <table class="table table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Item Name</th>
+              <th scope="col">Quantity</th>
+            </tr>
+          </thead>
+          <tbody id="review_item">
+          </tbody>
+        </table>
+      </div>
+      <div class="container">
+        <div id='review_addr'></div><br>
+        <div class="row">
+          <div class="col-6">
+            <div id='review_price'></div>
+          </div>
+          <div class="col">
+            <div class="d-flex justify-content-end"><button onclick="upload_menu()">submit</button></div>
+          </div>
+          </div>
+        </div>
+      </div>
+    <!--   <div class='item' style='float:left;'>;'><b>Total price: </b></div>
+     -->
+
   <footer class="footer">
     <div class="text-center col">
       <div>
@@ -83,12 +161,113 @@
   <!--/.footer-->
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  </script>
+
+
+  <div class="shopping-cart" id="shopping-cart" style="display:none; position: fixed; right: 10px; background: black;  color: #c4e2ff; width:350px; overflow: auto;">
+    <!-- Title -->
+    <div class="title">
+      <b class="text-info cart-title">Shopping Cart</b>
+    </div><br>
+    <div class="container">
+      <table class="table table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Item Name</th>
+            <th scope="col">Quantity</th>
+          </tr>
+        </thead>
+        <tbody id="cart_content">
+        </tbody>
+      </table>
+    </div>
+
 </body>
 </html>
+<script type="text/javascript">
+  var cart_count = 0;
+  var cart_item = [];
+  var display_cart = false;
+  user_id = document.getElementById("user_id").innerHTML;
+  var dict = {};
+  var tot = 0;
+  var dict_str;
+
+  function user()
+  {
+    $.ajax( { url: "https://api.mlab.com/api/1/databases/my-db/collections/my-coll?apiKey=myAPIKey"}).done(function(data){
+      var output = '';
+      $.each(data, function(key,data){
+
+      });
+    });
+
+  }
+
+  function ins() {
+    $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
+    data: JSON.stringify({"ItemId": item_str,'TotalPrice' : "$"+price, 'CookTime' : cook_time}),
+    type: "POST",
+    contentType: "application/json" } );
+  }
+
+  function cart(target){
+    eles = target.split("$")
+    name = eles[0]
+    price = eles[1]
+    tot += parseInt(price)
+    totp = parseFloat(Math.round(tot*1.06*100)/100).toFixed(2)
+    cart_count += 1;
+
+    if (dict[name]>=1){
+      dict[name] += 1;
+  }else{
+    dict[name] = 1;
+  }
+
+    document.getElementById("cart_count").innerHTML = cart_count;
+    $("#cart_content").html("");
+    dict_str = "";
+    for (var key in dict){
+      var new_ele = "<tr><td>"+key+" </td><td> "+dict[key]+"</td></tr> ";
+      $("#cart_content").append(new_ele);
+      dict_str += key+","+dict[key]+";"
+      }
+      // alert(dict_str)
+      var new_ele = "<tr><td>Total:</td><td><b>$"+totp+"</b></td></tr>";
+      $("#cart_content").append(new_ele);
+
+      var new_ele = "<tr><td class='text-success'>Click on Check Out to place an order</td><td><button class='btn btn-sm' onclick='upload()'><b>Check Out</b></button></td></tr>"
+
+      $("#cart_content").append(new_ele);
+    }
+
+
+  function upload_menu(){
+    $.ajax({
+      type: "POST",
+      url: "/upload_menu?info="+dict_str+"&price="+totp+"&username="+user_id,
+      datatype: 'json',
+      // data: "formname="+formname+"&status="+status,
+      success: function(res){
+          var obj = JSON.parse(res);
+          alert("Thank you for Placing the order.Please wait for the order to be delivered.");
+          console.log(obj)
+        }
+    });//ajax
+  }
+
+
+  function pop_cart(){
+    if (display_cart == false){
+      display_cart = true;
+    }else{
+      display_cart = false;
+    }
+    if(display_cart==true){
+      $("#shopping-cart").css('display', "inline-block");
+    }else{
+      $("#shopping-cart").css('display', "none");
+    }
+
+  }
+</script>

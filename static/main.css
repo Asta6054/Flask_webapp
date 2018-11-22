@@ -29,6 +29,12 @@ html {
   font-family: Times New Roman, Times, serif;
 }
 
+.cart-title{
+  text-transform: uppercase;
+  font-size: 1.3rem;
+  font-family: Times New Roman, Times, serif;
+}
+
 .btnhr{
   text-transform: uppercase;
   background-color: rgba(255,249,233,0.9);

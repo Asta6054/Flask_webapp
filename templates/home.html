@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container-fluid mt-4 mb-5 pb-5" style="background: rgba(0,1,4,.6)">
+<div class="container-fluid mt-4 mb-5 pb-5" id="menupage" style="background: rgba(0,1,4,.6)">
   <br>
   <legend class="border-bottom text-white font-italic" style="font-family: Times New Roman, Times, serif"><h1 class="font-weight-bold text-white">Welcome to Muse</h1>
   <p>Open Hours: 10:30AM - 9:00PM</p>
@@ -42,9 +42,7 @@
                 <!--  <div class="ml-5 row">
                    <label for="">Time</label>:<p class="article-content">{{ e['Time'] }}</p>
                  </div> -->
-                <form action="{{url_for('add2kart', item_name =e['ItemName'])}}" method="post">
-                 <input type="submit" class="mr-4 btn btn-md btnuhr bg-info" name="addkart" value="Add to cart">
-               </form>
+                <input type="button" class="mr-4 btn btn-md btnuhr bg-info" id="{{ e['ItemName'] }}{{e['Price']}}" name="addkart" price="{{ e['Price'] }}" value="Add to cart" onclick="cart(this.id)">
                </div>
             </div>
             </div>
@@ -73,9 +71,7 @@
                 <!--  <div class="ml-5 row">
                    <label for="">Time</label>:<p class="article-content">{{ e['Time'] }}</p>
                  </div> -->
-                 <form action="{{url_for('add2kart', item_name =e['ItemName'])}}" method="post">
-                  <input type="submit" class="mr-4 btn btn-md btnuhr bg-info" name="addkart" value="Add to cart">
-                </form>
+                 <input type="button" class="mr-4 btn btn-md btnuhr bg-info" id="{{ e['ItemName'] }}{{e['Price']}}" name="addkart" price="{{ e['Price'] }}" value="Add to cart" onclick="cart(this.id)">
                </div>
             </div>
             </div>
@@ -104,9 +100,7 @@
                 <!--  <div class="ml-5 row">
                    <label for="">Time</label>:<p class="article-content">{{ e['Time'] }}</p>
                  </div> -->
-                 <form action="{{url_for('add2kart', item_name =e['ItemName'])}}" method="post">
-                  <input type="submit" class="mr-4 btn btn-md btnuhr bg-info" name="addkart" value="Add to cart">
-                </form>
+                 <input type="button" class="mr-4 btn btn-md btnuhr bg-info" id="{{ e['ItemName'] }}{{e['Price']}}" name="addkart" price="{{ e['Price'] }}" value="Add to cart" onclick="cart(this.id)">
                </div>
             </div>
           </article>
@@ -200,4 +194,41 @@
   </div>
   {% endif %}
 </div>
+<script type="text/javascript">
+  function upload(){
+    // $("#menupage").css({"display:":"none"});
+    $("#menupage").hide();
+    // $("#review").css({"display:":"block"});
+    $("#review").show();
+
+    var user_id = document.getElementById("user_id").innerHTML;
+    // document.getElementById("user_id").style.color = "white";
+    // alert("ab")
+    $.ajax({
+      type: "POST",
+      url: "/review?user="+user_id,
+      datatype: 'json',
+      // data: "formname="+formname+"&status="+status,
+      success: function(res){
+          var obj = JSON.parse(res);
+          console.log(res);
+          document.getElementById("review_addr").innerHTML = "Your order will be sent to : "+ obj.address;
+          document.getElementById("review_price").innerHTML = "Total price: $"+ totp;
+
+          // var cont = document.getElementById("cart_content").innerHTML;
+          // document.getElementById("review_item").innerHTML = cont;
+          for (var key in dict){
+            var new_ele ="<tr>";
+            new_ele += "<td>"+key+" </td><td>"+dict[key]+"</td> ";
+            new_ele += "</tr>";
+            $("#review_item").append(new_ele);
+          }
+
+
+        }
+    });//ajax
+    $("#shopping-cart").css('display', "none");
+  }
+
+</script>
 {% endblock content %}
