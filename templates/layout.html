@@ -247,6 +247,7 @@
           var obj = JSON.parse(res);
           var num = parseInt(obj.time)+(parseInt(obj.distanceETA)+5);
           alert("Thank you for Placing the order.Please wait for the order to be delivered.");
+          window.location.pathname = '/index'
           console.log(obj)
         }
     });//ajax
