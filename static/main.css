@@ -5,7 +5,21 @@ html {
 .navbg{
   background-color: rgb(253,247,223);
 }
-
+.redborder {
+  border: 5px solid red;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  }
+.greenborder {
+  border: 5px solid green;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  }
+.yellowborder {
+  border: 5px solid yellow;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  }
 .content {
   margin-top: 5rem;
   flex: 1 0 auto;

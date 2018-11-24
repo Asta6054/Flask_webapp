@@ -38,7 +38,7 @@ $("document").ready(function() {
 
 function cooking(o_id,ct,or_id) {
   var coutput = '';
-  coutput += '<div class="media content-section" id="cookt'+or_id+'">'
+  coutput += '<div class="media" id="cookt'+or_id+'">'
   coutput += '<div class="media-body">';
   coutput += '<div class="well mx-auto">';
   coutput += '<h3>Order Number: '+ or_id + '</h3>';
@@ -94,15 +94,22 @@ function timer(duration, display, od, orid) {
     }
 
     if (minutes == 1 ) {
-      od.style.border = "thick solid yellow";
+      $('#cookt'+orid+'').addClass("yellowborder");
+      $('#cookt'+orid+'').removeClass("greenborder");
+      display.style.color = "rgb(249, 212, 1)";
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }else if (minutes < 1) {
-      od.style.border = "thick solid red";
+      $('#cookt'+orid+'').addClass("redborder");
+      $('#cookt'+orid+'').removeClass("yellowborder");
+      $('#cookt'+orid+'').removeClass("greenborder");
       setInterval(blink_text(orid), 1000);
       display.style.color = "red";
       display.textContent = minutes + ":" + seconds +" Mins Left";
-    }else {
-      od.style.border = "thick solid green";
+    }else if (minutes > 1) {
+      $('#cookt'+orid+'').addClass("greenborder");
+      display.style.color = "green";
+      display.textContent = minutes + ":" + seconds +" Mins Left";
+    }else{
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }
     cTime = minutes + ":" + seconds;
@@ -136,7 +143,7 @@ function nntimer(duration, display, od, orid) {
 /////////////////////////////////////////////////////
 //chnaged the if check as it was not calling this
     if (minutes >= 0) {
-      od.style.border = "thick solid red";
+      $('#cookt'+orid+'').addClass("redborder");
       setInterval(blink_text(orid), 1000);
       display.style.color = "red";
       display.textContent = minutes + ":" + seconds +" Mins Left";
@@ -165,7 +172,7 @@ $.ajax({
 }).done(function(data) {
   var ItemL = '';
   $.each(data, function(key, data){
-      if(data.status == "cooking" && data._id.$oid == oid ){
+      if(data._id.$oid == oid ){
         for(var i = 0; i < data.Itemlist.length; i++){
           var itemid = data.Itemlist[i].Itemname;
           console.log(itemid);
@@ -190,11 +197,14 @@ function done(e){
   ITid = $(e).attr("data-itemid");
   CTid = $(e).attr("data-cooktime");
   USid = $(e).attr("data-uid");
+  $('#cookt'+ORid+'').empty();
+  $('#cookt'+ORid+'').removeClass("redborder");
+  $('#cookt'+ORid+'').removeClass("greenborder");
+  $('#cookt'+ORid+'').removeClass("yellowborder");
   $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + USid + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
   data: JSON.stringify({ "$set" : { "status" : "RFD" } }),
   type: "PUT",
   contentType: "application/json" } );
-    $('#cookt'+ORid+'').empty();
 }
 
 function pending() {
@@ -212,7 +222,22 @@ function pending() {
       output += '<div class="media-body">';
       output += '<div class="well">';
       output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
+      output +=  '<div class="row">';
+      output +=  '<div class="col">';
+      output +=  '<p>Total Item count: ' + data.Itemlist.length + '</p>';
+      output +=  '</div>';
+      output +=  '<div class="col justify-content-end">';
+      output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data._id.$oid+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
+      output +=  '</div>';
+      output +=  '</div>';
+      output +=  '<div class="row">';
+      output +=  '<div class="col">';
+      output +=  '<p> Customer Id: ' + data.Uid + '</p>';
+      output +=  '</div>';
+      output +=  '<div class="col justify-content-end">';
       output +=  '<p> CookTime: ' + data.CookTime + '</p>';
+      output +=  '</div>';
+      output +=  '</div>';
       output +=  '</div>';
       output +=  '<div class="row container">';
       output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-cooktime="'+data.CookTime+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">Move To Cooking</a>';

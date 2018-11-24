@@ -193,17 +193,6 @@
   var tot = 0;
   var dict_str;
 
-  function user()
-  {
-    $.ajax( { url: "https://api.mlab.com/api/1/databases/my-db/collections/my-coll?apiKey=myAPIKey"}).done(function(data){
-      var output = '';
-      $.each(data, function(key,data){
-
-      });
-    });
-
-  }
-
 
   function cart(target){
     eles = target.split("$")
@@ -240,7 +229,7 @@
   function upload_menu(){
     $.ajax({
       type: "POST",
-      url: "/upload_menu?info="+dict_str+"&price="+totp+"&username="+user_id,
+      url: "/upload_menu?info="+dict_str+"&price="+totp+"&username="+user_id+"&ETA="+newobj,
       datatype: 'json',
       // data: "formname="+formname+"&status="+status,
       success: function(res){

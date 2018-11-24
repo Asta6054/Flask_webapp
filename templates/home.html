@@ -200,7 +200,6 @@
     $("#menupage").hide();
     // $("#review").css({"display:":"block"});
     $("#review").show();
-
     var user_id = document.getElementById("user_id").innerHTML;
     // document.getElementById("user_id").style.color = "white";
     // alert("ab")
@@ -212,7 +211,7 @@
       success: function(res){
           var obj = JSON.parse(res);
           console.log(res);
-          var newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5);
+          newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA;
 
           document.getElementById("review_addr").innerHTML = "Your order will be sent to : "+ obj.address;
 

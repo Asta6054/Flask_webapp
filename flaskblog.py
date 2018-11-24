@@ -7,6 +7,7 @@ import json
 import urllib.request
 import datetime
 import string, json
+from bson.json_util import dumps
 
 app = Flask(__name__)
 
@@ -46,6 +47,7 @@ class googleapi:
             URL="https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="+startLoc+"&destinations="+endLoc+"&key="+self.googleapikey
             requestinfo = json.load(urllib.request.urlopen(URL))
             return requestinfo
+
 
 @app.route('/')
 def index():
@@ -657,7 +659,11 @@ def reviewAjax():
     user_email = request.args.get('user')
     # print (user_email)
     user = mongo.db.login.find_one({'email' : user_email})
-    return json.dumps({'status':'OK','time':cook_time, 'address':user['address'], 'distanceETA' : user['ETA']});
+    pipeline = [{ '$match':{'status':"pending"}},{ '$group':{'_id':"$status",'total':{'$sum': "$CookTime"}}}]
+    cursor = order.aggregate(pipeline,allowDiskUse = False)
+    for doc in cursor:
+        print(doc['total'])
+    return json.dumps({'status':'OK','time':cook_time, 'address':user['address'], 'distanceETA' : user['ETA'], 'pETA':doc['total']});
 
 
 
@@ -668,6 +674,7 @@ def upload_m():
     info = request.args.get("info")
     print(info)
     price = request.args.get("price")
+    cusETA = request.args.get("ETA")
     print(price)
     username = request.args.get("username")
     print(username)
@@ -676,6 +683,7 @@ def upload_m():
     item_str = []
     qty = ""
     time_list = []
+    pend_time_list = []
     order_status = "pending"
     menu1 = mongo.db.menu1
     menu2 = mongo.db.menu2
@@ -714,7 +722,6 @@ def upload_m():
     order = mongo.db.order
     count_order = order.find().count() + 1
     print ("order:", count_order)
-
     print("$$",time_list)
 
     item_str2 = []
@@ -727,7 +734,7 @@ def upload_m():
 
     cook_time ="%d" % (max(time_list))
     print (time_list, "max:", cook_time)
-    order.insert_one({"Uid": username, "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : cook_time, 'distanceETA' : user['ETA'], 'status:' : order_status})
+    order.insert_one({"Uid": username, "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : int(cook_time), 'distanceETA' : user['ETA'], 'status' : order_status, 'CustomerETA': cusETA})
 
     # return "succ"
     return json.dumps({'status':'OK', 'time':cook_time, 'distanceETA':user['ETA']});
