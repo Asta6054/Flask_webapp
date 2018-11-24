@@ -23,10 +23,14 @@ function ready_for_delivery() {
       output += '<div class="media-body">';
       output += '<div class="well">';
       output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
-      output +=  '<p> CookTime: ' + data.CookTime + '</p>';
+      output +=  '<p> Delivery Distance: ' + data.distance + ' Miles</p>';
+      output +=  '<p> Delivery Time: ' + data.distanceETA + ' Minutes</p>';
+      output +=  '<p> Customer ID: ' + data.Uid + '</p>';
+      output +=  '<p> Address: ' + data.address + '</p>';
+      output +=  '<p> Contact: ' + data.contact + '</p>';
       output +=  '</div>';
       output +=  '<div class="row container">';
-      output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px"  data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
+      output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-userid="'+data.Uid+'" data-dis="'+data.distance+'" data-dETA="'+data.distanceETA+'" data-address="'+data.address+'" data-contact="'+data.contact+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
       output +=  '</div>';
       output +=  '</div>';
       output += '</article>';
@@ -51,10 +55,14 @@ function refreshpending1() {
         output += '<div class="media-body">';
         output += '<div class="well">';
         output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
-        output +=  '<p> CookTime: ' + data.CookTime + '</p>';
+        output +=  '<p> Delivery Distance: ' + data.distance + ' Miles</p>';
+        output +=  '<p> Delivery Time: ' + data.distanceETA + ' Minutes</p>';
+        output +=  '<p> Customer ID: ' + data.Uid + '</p>';
+        output +=  '<p> Address: ' + data.address + '</p>';
+        output +=  '<p> Contact: ' + data.contact + '</p>';
         output +=  '</div>';
         output +=  '<div class="row container">';
-        output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px"  data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
+        output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-userid="'+data.Uid+'" data-dis="'+data.distance+'" data-dETA="'+data.distanceETA+'" data-address="'+data.address+'" data-contact="'+data.contact+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
         output +=  '</div>';
         output +=  '</div>';
         output += '</article>';
@@ -69,9 +77,14 @@ function refreshpending1() {
     console.log(e);
     var o_id = e.id;
     var or_id = $(e).attr("data-orderid");
+    var u_id = $(e).attr("data-userid");
+    var adr = $(e).attr("data-address");
+    var con = $(e).attr("data-contact");
+    var dis = $(e).attr("data-dis");
+    var dETA = $(e).attr("data-dETA");
     ins(o_id);
     $('#ready'+o_id+'').empty();
-    out_for_delivery(o_id,or_id);
+    out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA);
     // ready_for_delivery(o_id,or_id);
     // out_for_delivery(o_id,or_id)
     // refresh(ct);
@@ -84,14 +97,17 @@ function refreshpending1() {
     contentType: "application/json" } );
   }
 
-function out_for_delivery(o_id,or_id)  {
+function out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA)  {
 	  var coutput = '';
   coutput += '<div id="out'+o_id+'">'
   coutput += '<article class="media content-section col">';
   coutput += '<div class="media-body">';
-
   coutput += '<h3>Order Number: '+ or_id + '</h3>';
-
+  coutput +=  '<p> Delivery Distance: ' + dis + ' Miles</p>';
+  coutput +=  '<p> Delivery Time: ' + dETA + ' Minutes</p>';
+  coutput +=  '<p> Customer ID: ' + u_id + '</p>';
+  coutput +=  '<p> Address: ' + adr + '</p>';
+  coutput +=  '<p> Contact: ' + con + '</p>';
   coutput +=  '<div class="container">';
   coutput += '<button class="btn btn-sm btn-success col" style="border-radius: 50px" data-orderid="'+or_id+'" data-uid="'+o_id+'" id="ordercomplete" onclick="complete(this)">Delivery Completed</button>';
   coutput += '</div>';

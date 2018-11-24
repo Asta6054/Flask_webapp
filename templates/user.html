@@ -57,14 +57,15 @@
                   <label>Role</label>:{{ m['role'] }}
                 </div>
                   <div class="row">
+                    <label>Change User role to:&nbsp;</label>
                     <form action="{{url_for('updateuser2c', user_name =m['email'])}}" method="post">
-                      <input type="submit" class="btn btnuhr btn-sm bg-info" id="chusrole2c" value="Change User role to customer">
+                      <input type="submit" class="btn btnuhr btn-sm bg-info mx-2" id="chusrole2c" value="customer">
                     </form>
                       <form action="{{url_for('updateuser2k', user_name =m['email'])}}" method="post">
-                      <input type="submit" class="btn btnuhr btn-sm bg-info" id="chusrole2k" value="Change User role to kitchen">
+                      <input type="submit" class="btn btnuhr btn-sm bg-info mx-2" id="chusrole2k" value="kitchen">
                     </form>
                       <form action="{{url_for('updateuser2d', user_name =m['email'])}}" method="post">
-                      <input type="submit" class="btn btnuhr btn-sm bg-info" id="chusrole2d" value="Change User role to delivery">
+                      <input type="submit" class="btn btnuhr btn-sm bg-info mx-2" id="chusrole2d" value="delivery">
                     </form>
                 </div>
               </div>

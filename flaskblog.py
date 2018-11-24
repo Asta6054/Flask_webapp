@@ -242,92 +242,6 @@ def deleteitem(item_name):
         session.pop('role', None)
         return redirect(url_for('login'))
 
-@app.route("/add2kart/<item_name>", methods=['GET','POST'])
-def add2kart(item_name):
-    if 'user' in session:
-        if request.method == 'POST':
-            global count
-            global b
-            print(item_name)
-            menu1 = mongo.db.menu1
-            menu2 = mongo.db.menu2
-            menu3 = mongo.db.menu3
-            m1found = menu1.find_one({'ItemName' : item_name})
-            print(m1found)
-            m2found = menu2.find_one({'ItemName' : item_name})
-            print(m2found)
-            m3found = menu3.find_one({'ItemName' : item_name})
-            print(m3found)
-            if(m1found != None):
-                if (m1found['ItemName'] == item_name):
-                    print(item_name)
-                    print(newdict)
-                    count += 1
-                    session['count'] = count
-                    x = m1found['ItemName']
-                    test = newdict.get('ItemName')
-                    print (test)
-                    if x in newdict.values():
-                        print ("hi")
-                        print (newdict.values())
-                        b += 1
-                        newdict.setdefault('Qty', []).append(b)
-                        b=0
-                    else:
-                        print ("oh")
-                        print (newdict)
-                        newdict.setdefault('ItemName', []).append(x)
-                    with open('text1.json', 'w') as f:
-                        json.dump(newdict, f)
-                    print (type(count))
-                    return redirect(url_for('home', count = count))
-            if(m2found != None):
-                if(m2found['ItemName'] == item_name):
-                    count += 1
-                    session['count'] = count
-                    x = m2found['ItemName']
-                    if x in newdict.values():
-                        print ("hi")
-                        print (newdict.values())
-                        b += 1
-                        newdict.setdefault('Qty', []).append(b)
-                        b=0
-                    else:
-                        print ("oh")
-                        print (newdict)
-                        newdict.setdefault('ItemName', []).append(x)
-                    with open('text1.json', 'w') as f:
-                        json.dump(newdict, f)
-                    print(m2found)
-                    return redirect(url_for('home'))
-            if(m3found != None):
-                if(m3found['ItemName'] == item_name):
-                    count += 1
-                    session['count'] = count
-                    x = m3found['ItemName']
-                    test = newdict.get('ItemName')
-                    print (test)
-                    if x in newdict.values():
-                        print ("hi")
-                        print (newdict.values())
-                        b += 1
-                        newdict.setdefault('Qty', []).append(b)
-                        b=0
-                    else:
-                        print ("oh")
-                        print (newdict)
-                        newdict.setdefault('ItemName', []).append(x)
-                    with open('text1.json', 'w') as f:
-                        json.dump(newdict, f)
-                    print(m3found)
-                    return redirect(url_for('home'))
-            return redirect(url_for('home'))
-        return redirect(url_for('menu'))
-    else:
-        session.pop('count', None)
-        session.pop('user', None)
-        session.pop('role', None)
-        return redirect(url_for('login'))
 
 @app.route("/admin/orderreview")
 def orderreviewpage():
@@ -442,47 +356,6 @@ def kitchen():
         session.pop('role', None)
         return redirect(url_for('login'))
 
-@app.route("/tocooking/<order_id>", methods=['GET','POST'])
-def tocooking(order_id):
-    if g.role == 'kitchen':
-        print(order_id)
-        ordermd = mongo.db.order
-        Cordermd = mongo.db.Corder
-        o1found = ordermd.find_one({'OrderId' : order_id})
-        print(o1found)
-        if(o1found != None):
-            if (o1found['OrderId'] == order_id):
-                Cordermd.insert(o1found)
-                ordermd.remove(o1found)
-                i = int(o1found['CookTime'])
-                while i < 0:
-                    print (i)
-                    flash( i + 'mins left','danger')
-                    i = i - 1
-            return redirect(url_for('kitchen'))
-    else:
-        session.pop('user', None)
-        session.pop('role', None)
-        return redirect(url_for('login'))
-
-@app.route("/toready/<order_id>", methods=['GET','POST'])
-def toready(order_id):
-    if g.role == 'kitchen':
-        print(order_id)
-        Cordermd = mongo.db.Corder
-        Rordermd = mongo.db.Rorder
-        o1found = Cordermd.find_one({'OrderId' : order_id})
-        print(o1found)
-        if(o1found != None):
-            if (o1found['OrderId'] == order_id):
-                Rordermd.insert(o1found)
-                Cordermd.remove(o1found)
-            return redirect(url_for('kitchen'))
-    else:
-        session.pop('user', None)
-        session.pop('role', None)
-        return redirect(url_for('login'))
-
 
 @app.route("/deliveryhomepage")
 def delivery():
@@ -497,41 +370,9 @@ def delivery():
         session.pop('role', None)
         return redirect(url_for('login'))
 
-@app.route("/toout/<order_id>", methods=['GET','POST'])
-def toout(order_id):
-    if g.role == 'delivery':
-        print(order_id)
-        Rordermd = mongo.db.Rorder
-        Oordermd = mongo.db.Oorder
-        o1found = Rordermd.find_one({'OrderId' : order_id})
-        print(o1found)
-        if(o1found != None):
-            if (o1found['OrderId'] == order_id):
-                Oordermd.insert(o1found)
-                Rordermd.remove(o1found)
-            return redirect(url_for('delivery'))
-    else:
-        session.pop('user', None)
-        session.pop('role', None)
-        return redirect(url_for('login'))
 
-@app.route("/todone/<order_id>", methods=['GET','POST'])
-def todone(order_id):
-    if g.role == 'delivery':
-        print(order_id)
-        Oordermd = mongo.db.Oorder
-        Dordermd = mongo.db.Dorder
-        o1found = Oordermd.find_one({'OrderId' : order_id})
-        print(o1found)
-        if(o1found != None):
-            if (o1found['OrderId'] == order_id):
-                Dordermd.insert(o1found)
-                Oordermd.remove(o1found)
-            return redirect(url_for('delivery'))
-    else:
-        session.pop('user', None)
-        session.pop('role', None)
-        return redirect(url_for('login'))
+
+
 
 @app.route("/useraccount", methods=['GET','POST'])
 def useraccountpage():
@@ -661,9 +502,13 @@ def reviewAjax():
     user = mongo.db.login.find_one({'email' : user_email})
     pipeline = [{ '$match':{'status':"pending"}},{ '$group':{'_id':"$status",'total':{'$sum': "$CookTime"}}}]
     cursor = order.aggregate(pipeline,allowDiskUse = False)
-    for doc in cursor:
-        print(doc['total'])
-    return json.dumps({'status':'OK','time':cook_time, 'address':user['address'], 'distanceETA' : user['ETA'], 'pETA':doc['total']});
+    if order.count() != 0:
+        for test in cursor:
+            estp = test['total']
+            print(test['total'])
+    else:
+        estp = 0
+    return json.dumps({'status':'OK','time':cook_time, 'address':user['address'], 'distanceETA' : user['ETA'], 'pETA':estp});
 
 
 
@@ -734,7 +579,8 @@ def upload_m():
 
     cook_time ="%d" % (max(time_list))
     print (time_list, "max:", cook_time)
-    order.insert_one({"Uid": username, "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : int(cook_time), 'distanceETA' : user['ETA'], 'status' : order_status, 'CustomerETA': cusETA})
+    order.insert_one({"Uid": user['username'], "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : int(cook_time),
+    'distanceETA' : user['ETA'], 'status' : order_status, 'address':user['address'], 'contact':user['telephone'], 'CustomerETA': cusETA, 'distance':user['distance']})
 
     # return "succ"
     return json.dumps({'status':'OK', 'time':cook_time, 'distanceETA':user['ETA']});
