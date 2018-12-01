@@ -123,71 +123,12 @@ user_id = document.getElementById("user_id").innerHTML;
             output +=  '<p> Status: Error</p>';
           }
           if (data.status == "pending") {
-            newtime(user_id);
-            var newobj = (data.plcdts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            var phr = dateB.getHours()*60;
-            var pmin =  dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            cmin = rminutes + pmin;
-            console.log(rminutes);
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
-
           }else if (data.status == "cooking") {
-            var newobj = (data.cookts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rhresu);
-            console.log(rminutes);
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "RFD") {
-            var newobj = (data.rfdts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-
-            var hresu = ((res / 60) - 12);
-
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rhresu);
-            console.log(rminutes);
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "OFD") {
-            var newobj = (data.ofdts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rhresu);
-            console.log(rminutes);
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if(data.status == "DC"){
             var newobj = (data.dcts);
@@ -243,10 +184,6 @@ user_id = document.getElementById("user_id").innerHTML;
 
         }
     });
-  }
-
-  function newtime(user_id){
-
   }
 
   function itemLIST(e) {
@@ -322,67 +259,13 @@ user_id = document.getElementById("user_id").innerHTML;
             output +=  '<p> Status: Error</p>';
           }
           if (data.status == "pending") {
-            var newobj = (data.plcdts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "cooking") {
-            var newobj = (data.cookts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rhresu);
-            console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "RFD") {
-            var newobj = (data.rfdts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-
-            var hresu = ((res / 60) - 12);
-
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rhresu);
-            console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "OFD") {
-            var newobj = (data.ofdts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rhresu);
-            console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if(data.status == "DC"){
             var newobj = (data.dcts);
             var hours = ((newobj / 60) - 12)

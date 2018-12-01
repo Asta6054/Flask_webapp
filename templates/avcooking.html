@@ -93,25 +93,10 @@
             output +=  '<p> Status: Error</p>';
           }
           if (data.status == "cooking") {
-            var newobj = (data.cookts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rhresu);
-            console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
-          }
-          else {
-            output +=  '<p>Estimated Time of Arrival: Error</p>';
-          }
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+          }else {
+              output +=  '<p>Estimated Time of Arrival: Error</p>';
+            }
           output +=  '</div>';
           output +=  '</div>';
           output +=  '</div>';
@@ -120,6 +105,39 @@
         }
       });
       $('#cusorder').append(output);
+    });
+  }
+
+  function gettime(e) {
+    $('.bg-modaler').show();
+    $('#time-form').empty();
+    orid = $(e).attr("data-id");
+    $.ajax({
+      type: "POST",
+      url: "/new_time?info="+orid+"",
+      datatype: 'json',
+      // data: "formname="+formname+"&status="+status,
+      success: function(res){
+        var obj = JSON.parse(res);
+        console.log(res);
+        newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA+obj.cETA;
+        var d = new Date().getTime();
+        var dateB = new Date(d);
+        var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+        console.log(dayRelativeDifference);
+        pts = dayRelativeDifference;
+        resu = dayRelativeDifference + newobj;
+        console.log(resu);
+        var hours = ((resu / 60) - 12);
+        rhours = Math.floor(hours);
+        var minutes = (hours - rhours) * 60;
+        rminutes = Math.round(minutes);
+        console.log(rhours);
+        console.log(rminutes);
+
+        document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+
+        }
     });
   }
 
