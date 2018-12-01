@@ -36,15 +36,20 @@ $("document").ready(function() {
     });
 });
 
-function cooking(o_id,ct,or_id) {
+function cooking(o_id,ct,or_id,Uid) {
   var coutput = '';
   coutput += '<div class="media content-section" id="cookt'+or_id+'">'
   coutput += '<div class="media-body">';
   coutput += '<div class="well mx-auto">';
   coutput += '<h3>Order Number: '+ or_id + '</h3>';
+  coutput +=  '<div class="container mb-1 mr-2">';
+  coutput +=  '<div class="d-flex justify-content-end">';
+  coutput += '<a class="btn btn-outline-primary" data-id="'+o_id+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
+  coutput +=  '</div>';
+  coutput +=  '</div>';
   coutput += '<div class="row">';
   coutput += '<div class="col mr-auto">';
-  coutput += '<a class="btn btn-outline-primary" data-id="'+o_id+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
+  coutput +=  '<p> Customer Id: ' + Uid + '</p>';
   coutput += '</div>';
   coutput += '<div class="col">';
   coutput += '<p>Cook Time: <span class="blink" id="time'+or_id+'" onload=starttimer()>00:00</span>';
@@ -135,7 +140,6 @@ function nntimer(duration, display, orid) {
 /////////////////////////////////////////////////////
 //chnaged the if check as it was not calling this
     if (minutes >= 0) {
-      $('#cookt'+orid+'').addClass("redborder");
       setInterval(blink_text(orid), 1000);
       display.style.color = "red";
       display.textContent = minutes + ":" + seconds +" Mins Left";
@@ -231,7 +235,7 @@ function pending() {
       output +=  '</div>';
       output +=  '</div>';
       output +=  '<div class="row container">';
-      output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-cooktime="'+data.CookTime+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">Move To Cooking</a>';
+      output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-cooktime="'+data.CookTime+'" data-Uid="'+data.Uid+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">Move To Cooking</a>';
       output +=  '</div>';
       output +=  '</div>';
       output += '</article>';
@@ -250,13 +254,14 @@ function pending() {
     console.log($(e).attr("data-orderid"));
     var or_id = $(e).attr("data-orderid");
     var ct = $(e).attr("data-cooktime");
+    var Uid = $(e).attr("data-Uid");
     cooktimeid = ct;
     userID = o_id;
     orderID = or_id;
     ins(o_id);
     // del(o_id);
     $('#pend'+or_id+'').empty();
-    cooking(o_id,ct,or_id);
+    cooking(o_id,ct,or_id,Uid);
     // refresh(ct);
   }
 

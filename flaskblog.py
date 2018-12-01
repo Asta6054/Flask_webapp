@@ -520,6 +520,7 @@ def reviewAjax():
     items = info.split(";")[:-1]
     item_str = []
     qty = ""
+    estp = 0
     time_list = []
     order_status = "pending"
     menu1 = mongo.db.menu1
