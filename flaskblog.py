@@ -38,6 +38,15 @@ def TimeStamp():
     Timest = GetTimeformTimestamp(ts)
     return Timest
 
+class db:
+    def dbget(self, obj1):
+        allorder = mongo.db.order
+        order = allorder.find_one({'OrderId' : obj1})
+        ct = order['CookTime']
+        eta = order['distanceETA']
+        times = [ct,eta]
+        return times
+
 class googleapi:
         googleapikey = "AIzaSyA2TMNF1bewLerQgvelJwKPu1xkAMZbz7c"
         def get(self, endLoc):
@@ -511,6 +520,40 @@ def cusorderhistory():
         session.pop('role', None)
         return redirect(url_for('login'))
 
+# --------------------------- CUSTOMER_ETA_PENDING -------------------------
+
+@app.route("/new_time", methods=['GET','POST'])
+def new_t():
+    estp = 0
+    estp2 = 0
+    info = request.args.get("info")
+    print("521",info)
+    allorder = mongo.db.order
+    user = mongo.db.order.find_one({'OrderId' : int(info)})
+    print("533",user)
+    pipeline = [{ '$match':{'status':"pending"}},{ '$group':{'_id':"$status",'total':{'$sum': "$CookTime"}}}]
+    cursor = allorder.aggregate(pipeline,allowDiskUse = False)
+    if allorder.count() != 0:
+        for test in cursor:
+            estp = test['total']
+            print(test['total'])
+    else:
+        estp = 0
+    pipeline2 = [{ '$match':{'status':"cooking"}},{ '$group':{'_id':"$status",'total':{'$max': "$CookTime"}}}]
+    cursor2 = allorder.aggregate(pipeline2,allowDiskUse = False)
+    if allorder.count() != 0:
+        for test2 in cursor2:
+            estp2 = test2['total']
+            print(test2['total'])
+    else:
+        estp2 = 0
+
+    return json.dumps({'status':'OK','time': user['CookTime'], 'distanceETA' : user['distanceETA'], 'pETA':estp, 'cETA':estp2});
+
+
+
+
+
 # ---------------------------- ORDER PAGE START----------------------------
 
 
@@ -521,6 +564,7 @@ def reviewAjax():
     item_str = []
     qty = ""
     estp = 0
+    estp2 = 0
     time_list = []
     order_status = "pending"
     menu1 = mongo.db.menu1
@@ -558,6 +602,8 @@ def reviewAjax():
 
 
     order = mongo.db.order
+    print("608 ",order['CookTime'])
+
     count_order = order.find().count() + 1
     print ("order:", count_order)
 
@@ -584,7 +630,15 @@ def reviewAjax():
             print(test['total'])
     else:
         estp = 0
-    return json.dumps({'status':'OK','time':cook_time, 'address':user['address'], 'distanceETA' : user['ETA'], 'pETA':estp});
+    pipeline2 = [{ '$match':{'status':"cooking"}},{ '$group':{'_id':"$status",'total':{'$max': "$CookTime"}}}]
+    cursor2 = order.aggregate(pipeline2,allowDiskUse = False)
+    if order.count() != 0:
+        for test2 in cursor2:
+            estp2 = test2['total']
+            print(test2['total'])
+    else:
+        estp2 = 0
+    return json.dumps({'status':'OK','time':cook_time, 'address':user['address'], 'distanceETA' : user['ETA'], 'pETA':estp, 'cETA':estp2});
 
 
 

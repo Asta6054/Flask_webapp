@@ -49,6 +49,20 @@
   </div>
 
 </div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="bg-modaler" style="background-color: rgba(0, 0, 0,0.7); height: 100%;	width: 90%; position: absolute; top: 0; display: none; justify-content: center; align-items: center">
+      <div class="modal-contents mx-auto my-4" style="height: 80%;	width: 60%;	background-color: white;	text-align: center;	padding: 20px;	position: relative;	border-radius: 4px">
+        <div class="close" style="position: absolute; top: 0; right: 10px; font-size: 42px; cursor: pointer"><img class="logo" height="40" src="/static/background/close.svg"/></div><br>
+          <div id="time-form">
+
+          </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 <script type="text/javascript">
 user_id = document.getElementById("user_id").innerHTML;
   $("document").ready(function() {
@@ -61,6 +75,13 @@ user_id = document.getElementById("user_id").innerHTML;
       $('.close').click(function() {
       document.querySelector('.bg-modal').style.display = "none";
       });
+      $('.bg-modaler').hide();
+        $('#gettime').click(function() {
+        document.querySelector('.bg-modaler').style.display = "flex";
+        });
+        $('.close').click(function() {
+        document.querySelector('.bg-modaler').style.display = "none";
+        });
   });
 
   function getOrders() {
@@ -102,10 +123,13 @@ user_id = document.getElementById("user_id").innerHTML;
             output +=  '<p> Status: Error</p>';
           }
           if (data.status == "pending") {
+            newtime(user_id);
             var newobj = (data.plcdts);
             var d = new Date().getTime();
             var dateB = new Date(d);
             var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            var phr = dateB.getHours()*60;
+            var pmin =  dateB.getMinutes();
             console.log(dayRelativeDifference);
             res = (dayRelativeDifference + newobj) - data.expETA ;
             console.log(res);
@@ -113,8 +137,10 @@ user_id = document.getElementById("user_id").innerHTML;
             rhresu = Math.floor(hresu);
             var minutes = (hresu - rhresu) * 60;
             rminutes = Math.round(minutes);
+            cmin = rminutes + pmin;
             console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+
           }else if (data.status == "cooking") {
             var newobj = (data.cookts);
             var d = new Date().getTime();
@@ -130,7 +156,7 @@ user_id = document.getElementById("user_id").innerHTML;
             rminutes = Math.round(minutes);
             console.log(rhresu);
             console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "RFD") {
             var newobj = (data.rfdts);
             var d = new Date().getTime();
@@ -147,7 +173,7 @@ user_id = document.getElementById("user_id").innerHTML;
             rminutes = Math.round(minutes);
             console.log(rhresu);
             console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "OFD") {
             var newobj = (data.ofdts);
             var d = new Date().getTime();
@@ -162,7 +188,7 @@ user_id = document.getElementById("user_id").innerHTML;
             rminutes = Math.round(minutes);
             console.log(rhresu);
             console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if(data.status == "DC"){
             var newobj = (data.dcts);
             var hours = ((newobj / 60) - 12)
@@ -184,6 +210,43 @@ user_id = document.getElementById("user_id").innerHTML;
       });
       $('#cusorder').append(output);
     });
+  }
+
+  function gettime(e) {
+    $('.bg-modaler').show();
+    $('#time-form').empty();
+    orid = $(e).attr("data-id");
+    $.ajax({
+      type: "POST",
+      url: "/new_time?info="+orid+"",
+      datatype: 'json',
+      // data: "formname="+formname+"&status="+status,
+      success: function(res){
+        var obj = JSON.parse(res);
+        console.log(res);
+        newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA+obj.cETA;
+        var d = new Date().getTime();
+        var dateB = new Date(d);
+        var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+        console.log(dayRelativeDifference);
+        pts = dayRelativeDifference;
+        resu = dayRelativeDifference + newobj;
+        console.log(resu);
+        var hours = ((resu / 60) - 12);
+        rhours = Math.floor(hours);
+        var minutes = (hours - rhours) * 60;
+        rminutes = Math.round(minutes);
+        console.log(rhours);
+        console.log(rminutes);
+
+        document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+
+        }
+    });
+  }
+
+  function newtime(user_id){
+
   }
 
   function itemLIST(e) {

@@ -229,7 +229,7 @@
       success: function(res){
           var obj = JSON.parse(res);
           console.log(res);
-          newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA;
+          newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA+obj.cETA;
           var d = new Date().getTime();
           var dateB = new Date(d);
           var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
