@@ -21,6 +21,11 @@ class AccupdateForm(FlaskForm):
     submit = SubmitField('Update')
     Telephone = StringField('Telephone', validators=[DataRequired(), Regexp('(^[+0-9]{1,3})*([0-9]{10,11}$)', message="Enter Valid Phone Number")])
 
+class AcerrupdateForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(min=1, max=50)])
+    Address = StringField('Address', validators=[DataRequired(), Length(min=10, message="Enter Valid Address")])
+    submit = SubmitField('Update')
+
 class MenuForm(FlaskForm):
     cateogry = SelectField(
         'Cateogry',

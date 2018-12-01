@@ -141,7 +141,17 @@
         <div id="review_ETA"></div><br>
         <div class="row">
           <div class="col-6">
-            <div id='review_price'></div>
+            <div id='review_price'>
+              <div id="review_tax">
+
+              </div>
+              <div id="review_total">
+
+              </div>
+              <div id="review_grandtot">
+
+              </div>
+            </div>
           </div>
           <div class="col">
             <div class="d-flex justify-content-end"><button onclick="upload_menu()">submit</button></div>
@@ -195,11 +205,13 @@
 
 
   function cart(target){
-    eles = target.split("$")
-    name = eles[0]
-    price = eles[1]
-    tot += parseInt(price)
-    totp = parseFloat(Math.round(tot*1.06*100)/100).toFixed(2)
+    eles = target.split("$");
+    name = eles[0];
+    price = eles[1];
+    tot += parseInt(price);
+    totp = parseFloat(Math.round(tot*1.06*100)/100).toFixed(2);
+    totax = parseFloat(Math.round(tot*0.06*100)/100).toFixed(2);
+    topr = totp - totax;
     cart_count += 1;
 
     if (dict[name]>=1){
@@ -217,7 +229,14 @@
       dict_str += key+","+dict[key]+";"
       }
       // alert(dict_str)
-      var new_ele = "<tr><td>Total:</td><td><b>$"+totp+"</b></td></tr>";
+      var new_ele = "<tr><td>Total:</td><td><b>$"+topr+"</b></td></tr>";
+      $("#cart_content").append(new_ele);
+
+      var new_ele = "<tr><td>Tax:</td><td><b>$"+totax+"</b></td></tr>";
+      $("#cart_content").append(new_ele);
+
+
+      var new_ele = "<tr><td>Grand Total:</td><td><b>$"+totp+"</b></td></tr>";
       $("#cart_content").append(new_ele);
 
       var new_ele = "<tr><td class='text-success'>Click on Check Out to place an order</td><td><button class='btn btn-sm' onclick='upload()'><b>Check Out</b></button></td></tr>"
@@ -229,7 +248,7 @@
   function upload_menu(){
     $.ajax({
       type: "POST",
-      url: "/upload_menu?info="+dict_str+"&price="+totp+"&username="+user_id+"&ETA="+newobj,
+      url: "/upload_menu?info="+dict_str+"&price="+totp+"&username="+user_id+"&ETA="+newobj+"&Tax="+totax+"&plcdts="+pts+"&ETAts="+resu,
       datatype: 'json',
       // data: "formname="+formname+"&status="+status,
       success: function(res){

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, flash, redirect, request, session, g
 from flask_pymongo import PyMongo
-from forms import RegistrationForm, LoginForm, MenuForm, AccupdateForm
+from forms import RegistrationForm, LoginForm, MenuForm, AccupdateForm, AcerrupdateForm
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_required
 import json
@@ -85,32 +85,32 @@ def register():
                 api=googleapi()
                 addr = form.Address.data
                 jdata = api.get(addr)
-                timemd = jdata['rows'][0]['elements'][0]['duration']
-                time = timemd['text'].split(' ')
-                time = time[0]
-                distancemd = jdata['rows'][0]['elements'][0]['distance']
-                distance = distancemd['text'].split(' ')
-                distance = distance[0]
-                ts = datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p")
-                print(timemd['text'])
-                print(distancemd['text'])
-                print(ts)
-                print(distance)
-                print(time)
-                if jdata['status'] == 'OK':
+                try:
+                    timemd = jdata['rows'][0]['elements'][0]['duration']
+                    time = timemd['text'].split(' ')
+                    time = time[0]
+                    distancemd = jdata['rows'][0]['elements'][0]['distance']
+                    distance = distancemd['text'].split(' ')
+                    distance = distance[0]
+                    ts = datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p")
+                    print(timemd['text'])
+                    print(distancemd['text'])
+                    print(ts)
+                    print(distance)
+                    print(jdata['status'])
                     if float(distance) <= float(15):
                         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-                        users.insert({'username' : form.username.data, 'email' : form.email.data, 'role' : 'customer', 'password' : hashed_password, 'telephone' : form.Telephone.data, 'address' : form.Address.data, 'distance' : distance, 'ETA' : time })
+                        users.insert({'username' : form.username.data, 'email' : form.email.data, 'role' : 'customer', 'password' : hashed_password, 'telephone' : form.Telephone.data, 'address' : form.Address.data, 'distance' : distance, 'ETA' : time, 'Error' : 'flase' })
                         flash('Your account has been created! You are now able to log in', 'success')
                     else:
                         print (jdata['status'])
                         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                         users.insert({'username' : form.username.data, 'email' : form.email.data, 'role' : 'customer', 'password' : hashed_password, 'telephone' : form.Telephone.data, 'address' : form.Address.data, 'distance' : distance, 'ETA' : time, 'Error' : 'true' })
                         flash('Your account has been created! You are now able to log in', 'success')
-                        flash('destination location crossed 15 miles delivery limit need to change at payment', 'danger')
-                else:
-                    print (jdata['status'])
-                    return jdata['status']
+                        flash('destination location crossed 15 miles delivery limit you will be taken to updae page once you login', 'danger')
+                except:
+                    flash('Invalid Address', 'danger')
+                    return redirect(url_for('register'))
                 return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -127,18 +127,24 @@ def login():
             lgin_user = users.find_one({'email' : form.email.data})
             if lgin_user:
                 if (bcrypt.check_password_hash(lgin_user['password'], form.password.data) is True):
-                    next_page = request.args.get('next')
-                    session['user'] = form.email.data
-                    session['role'] = lgin_user['role']
-                    if (lgin_user['role'] == 'admin'):
-                        return redirect(url_for('admin'))
-                    elif(lgin_user['role'] == 'kitchen'):
-                        return redirect(url_for('kitchen'))
-                    elif(lgin_user['role'] == 'delivery'):
-                        return redirect(url_for('delivery'))
-                    session.pop('count', None)
-                    userlog.insert({ 'id':lgin_user['_id'], 'User' : lgin_user['email'], 'TimeStamp' : ts })
-                    return redirect(next_page) if next_page else redirect(url_for('main'))
+                    if (lgin_user['Error'] != 'true'):
+                        next_page = request.args.get('next')
+                        session['user'] = form.email.data
+                        session['role'] = lgin_user['role']
+                        if (lgin_user['role'] == 'admin'):
+                            return redirect(url_for('admin'))
+                        elif(lgin_user['role'] == 'kitchen'):
+                            return redirect(url_for('kitchen'))
+                        elif(lgin_user['role'] == 'delivery'):
+                            return redirect(url_for('delivery'))
+                        else:
+                            pass
+                        session.pop('count', None)
+                        userlog.insert({ 'id':lgin_user['_id'], 'User' : lgin_user['email'], 'TimeStamp' : ts })
+                        return redirect(next_page) if next_page else redirect(url_for('main'))
+                    else:
+                        flash('destination location crossed 15 miles delivery limit please change the address', 'danger')
+                        return redirect(url_for('acuperror'))
                 else:
                     flash('Login Unsuccessful. Please check email and password', 'danger')
             else:
@@ -297,15 +303,6 @@ def updateuser2k(user_name):
         return redirect(url_for('login'))
 
 
-@app.route("/updateuserform")
-def acupdateform():
-    if g.role == 'customer':
-        return render_template('main.html')
-    else:
-        session.pop('user', None)
-        session.pop('role', None)
-        return redirect(url_for('login'))
-
 @app.route("/updateuserdetails", methods=['GET','POST'])
 def acupdate():
     if g.role == 'customer':
@@ -331,7 +328,7 @@ def acupdate():
                             existing_user['distance'] = distance
                             existing_user['ETA'] = time
                             users.save(existing_user)
-                            flash('Your account has been created! You are now able to place orders', 'success')
+                            flash('Your account has been updated successfully!', 'success')
                         else:
                             flash('destination location crossed 15 miles delivery limit!. Please change address', 'danger')
                     else:
@@ -343,6 +340,39 @@ def acupdate():
         session.pop('user', None)
         session.pop('role', None)
         return redirect(url_for('login'))
+
+@app.route("/user/distance_error_update", methods=['GET','POST'])
+def acuperror():
+        form = AcerrupdateForm()
+        if request.method == 'POST':
+            users = mongo.db.login
+            existing_user = users.find_one({'email' : form.email.data})
+            print(existing_user)
+            if form.validate_on_submit():
+                    api=googleapi()
+                    addr = form.Address.data
+                    jdata = api.get(addr)
+                    timemd = jdata['rows'][0]['elements'][0]['duration']
+                    time = timemd['text'].split(' ')
+                    time = time[0]
+                    distancemd = jdata['rows'][0]['elements'][0]['distance']
+                    distance = distancemd['text'].split(' ')
+                    distance = distance[0]
+                    if jdata['status'] == 'OK':
+                        if float(distance) <= float(15):
+                            existing_user['address'] = form.Address.data
+                            existing_user['Error'] = 'flase'
+                            existing_user['distance'] = distance
+                            existing_user['ETA'] = time
+                            users.save(existing_user)
+                            flash('Your account has been Updated successfully! You are now able to login and place orders', 'success')
+                        else:
+                            flash('destination location crossed 15 miles delivery limit!. Please change address', 'danger')
+                    else:
+                        print (jdata['status'])
+                        return jdata['status']
+                    return redirect(url_for('login'))
+        return render_template('acerrform.html', title='Account', form=form)
 
 @app.route("/kitchenhomepage")
 def kitchen():
@@ -401,12 +431,39 @@ def main():
 @app.route("/admin/orderstatus")
 def aoverwatch():
     if g.role == 'admin':
-        mlab = mongo.db
-        order=mlab.order.find({'status':'pending'})
-        Corder=mlab.order.find({'status':'cooking'})
-        rorder=mlab.order.find({'status':'RFD'})
-        Coorder=mlab.order.find({'status':'DC'})
-        return render_template('aoverwatch.html', order=order,Corder=Corder, rorder=rorder,Coorder=Coorder)
+        return render_template('aoverwatch.html',title='Admin Overview')
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+@app.route("/admin/orderstatus_dc")
+def vod():
+    if g.role == 'admin':
+        return render_template('avdc.html',title='Admin Overview')
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+@app.route("/admin/orderstatus_pending")
+def vop():
+    if g.role == 'admin':
+        return render_template('avpending.html',title='Admin Overview')
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+@app.route("/admin/orderstatus_cooking")
+def voc():
+    if g.role == 'admin':
+        return render_template('avcooking.html',title='Admin Overview')
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+@app.route("/admin/orderstatus_rfd")
+def vor():
+    if g.role == 'admin':
+        return render_template('avrfd.html',title='Admin Overview')
     else:
         session.pop('user', None)
         session.pop('role', None)
@@ -431,6 +488,24 @@ def staff():
         mlab = mongo.db
         members = mlab.login.find()
         return render_template('user.html', title='Members', post=members)
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+
+@app.route("/customer/current_order", methods=['GET', 'POST'])
+def cuscurrentorder():
+    if g.role == 'customer':
+        return render_template('corder.html', title='Personal Orders')
+    else:
+        session.pop('user', None)
+        session.pop('role', None)
+        return redirect(url_for('login'))
+
+@app.route("/customer/order_history", methods=['GET', 'POST'])
+def cusorderhistory():
+    if g.role == 'customer':
+        return render_template('coh.html', title='Members')
     else:
         session.pop('user', None)
         session.pop('role', None)
@@ -520,9 +595,11 @@ def upload_m():
     print(info)
     price = request.args.get("price")
     cusETA = request.args.get("ETA")
+    ETAresu = request.args.get("ETAts")
     print(price)
     username = request.args.get("username")
     print(username)
+    placedts = request.args.get("plcdts")
     user = mongo.db.login.find_one({'email' : username})
     items = info.split(";")[:-1]
     item_str = []
@@ -579,8 +656,9 @@ def upload_m():
 
     cook_time ="%d" % (max(time_list))
     print (time_list, "max:", cook_time)
-    order.insert_one({"Uid": user['username'], "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : int(cook_time),
-    'distanceETA' : user['ETA'], 'status' : order_status, 'address':user['address'], 'contact':user['telephone'], 'CustomerETA': cusETA, 'distance':user['distance']})
+    order.insert_one({"Uid": user['username'], "Ueid": username, "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : int(cook_time),
+    'distanceETA' : user['ETA'], 'status' : order_status, 'address':user['address'], 'contact':user['telephone'],
+     'CustomerETA': cusETA, 'distance':user['distance'], 'expETA':int(ETAresu), 'plcdts':int(placedts) , 'cookts':'blank', 'rfdts':'blank', 'ofdts':'blank', 'dcts':'blank'})
 
     # return "succ"
     return json.dumps({'status':'OK', 'time':cook_time, 'distanceETA':user['ETA']});

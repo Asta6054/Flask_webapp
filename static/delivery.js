@@ -83,6 +83,7 @@ function refreshpending1() {
     var dis = $(e).attr("data-dis");
     var dETA = $(e).attr("data-dETA");
     ins(o_id);
+    updateofdts(o_id);
     $('#ready'+o_id+'').empty();
     out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA);
     // ready_for_delivery(o_id,or_id);
@@ -95,6 +96,17 @@ function refreshpending1() {
     data: JSON.stringify({ "$set" : { "status" : "OFD" } }),
     type: "PUT",
     contentType: "application/json" } );
+  }
+
+  function updateofdts(o_id) {
+    var d = new Date().getTime();
+    var dateB = new Date(d);
+    var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+    $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + o_id + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
+    data: JSON.stringify({ "$set" : { "ofdts":parseInt(dayRelativeDifference) } }),
+    type: "PUT",
+    contentType: "application/json" } );
+
   }
 
 function out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA)  {
@@ -123,5 +135,17 @@ function complete(e){
   data: JSON.stringify({ "$set" : { "status" : "DC" } }),
   type: "PUT",
   contentType: "application/json" } );
+  updatects(o1_id);
     $('#out'+o1_id+'').empty();
+}
+
+function updatects(o_id) {
+  var d = new Date().getTime();
+  var dateB = new Date(d);
+  var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+  $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + o_id + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
+  data: JSON.stringify({ "$set" : { "dcts":parseInt(dayRelativeDifference) } }),
+  type: "PUT",
+  contentType: "application/json" } );
+
 }

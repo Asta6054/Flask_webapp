@@ -1,20 +1,20 @@
 {% extends "stafflayout.html" %}
 {% block content2 %}
-<div class="row container mx-auto mt-4 mb-4 pt-3" id="parent" style="background: rgba(0,1,4,.6)">
+<div class="container mx-auto" style="background: rgba(0,1,4,.6)">
+<br>
+<div class="mx-auto text-center font-italic" style="font-family: Times New Roman, Times, serif">
+<h1 class="text-white">Delivery</h1>
+</div>
+<div class="row container mx-auto mt-4 mb-4 pt-3" id="parent">
 
   <article class="media content-section col-6" style="background: rgba(253,251,251,.8)">
 	  <div class="media-body">
-<!--       <div class="container">
-        <div class="row">
-          <legend> -->
             <p class="text-center font-Times col border-bottom" style="font-family: Times New Roman, Times, serif";>
       	  		READY FOR DELIVERY
       	  	</p>
-        <!--   </legend> -->
-            <input class="btn btn-sm btn-primary col" style="border-radius: 50px" type="button" onclick="refreshpending1()"name="refresher" value="Check for Orders">
+<input class="btn btn-sm btn-primary col" style="border-radius: 50px" type="button" onclick="refreshpending1()"name="refresher" value="Check for Orders">
             <br>
-        <!-- </div>
-      </div> -->
+
       <br>
       <div id="ready_for_delivery">
 
@@ -23,16 +23,14 @@
 	</article>
 	<article class="media content-section col-6" style="background: rgba(253,251,251,.8)" >
 	  <div class="media-body">
-    <!--   <legend> -->
         <p class="text-center border-bottom font-Times" style="font-family: Times New Roman, Times, serif";>
   	  		OUT FOR DELIVERY
   	  	</p>
-      <!-- </legend> -->
 	    <div id="out_for_delivery">
 	    </div>
 	  </div>
-
 	</article>
+ </div>
  </div>
  <script src="/static/delivery.js"></script>
 {% endblock content2 %}

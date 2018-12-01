@@ -38,7 +38,7 @@ $("document").ready(function() {
 
 function cooking(o_id,ct,or_id) {
   var coutput = '';
-  coutput += '<div class="media" id="cookt'+or_id+'">'
+  coutput += '<div class="media content-section" id="cookt'+or_id+'">'
   coutput += '<div class="media-body">';
   coutput += '<div class="well mx-auto">';
   coutput += '<h3>Order Number: '+ or_id + '</h3>';
@@ -64,12 +64,11 @@ function starttimer(ti,orid) {
   //  var text = parseInt(data.CookTime);
   var st = ti.toString();
   var ct = 60 * ti,
-  display = document.querySelector('#time'+orid+''),
-  od = document.querySelector('#cookt'+orid);
-  timer(ct, display, od, orid);
+  display = document.querySelector('#time'+orid+'');
+  timer(ct, display, orid);
   //alert("After timer");
 }
-function timer(duration, display, od, orid) {
+function timer(duration, display, orid) {
   var timer = duration, minutes, seconds;
   var newt = setInterval(function () {
     minutes = parseInt(timer / 60, 10)
@@ -94,19 +93,13 @@ function timer(duration, display, od, orid) {
     }
 
     if (minutes == 1 ) {
-      $('#cookt'+orid+'').addClass("yellowborder");
-      $('#cookt'+orid+'').removeClass("greenborder");
       display.style.color = "rgb(249, 212, 1)";
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }else if (minutes < 1) {
-      $('#cookt'+orid+'').addClass("redborder");
-      $('#cookt'+orid+'').removeClass("yellowborder");
-      $('#cookt'+orid+'').removeClass("greenborder");
       setInterval(blink_text(orid), 1000);
       display.style.color = "red";
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }else if (minutes > 1) {
-      $('#cookt'+orid+'').addClass("greenborder");
       display.style.color = "green";
       display.textContent = minutes + ":" + seconds +" Mins Left";
     }else{
@@ -125,14 +118,13 @@ function timer(duration, display, od, orid) {
 }
 function newtimer(orid) {
   var ct = 0,
-  display = document.querySelector('#time'+orid+''),
-  od = document.querySelector('#cookt'+orid);
+  display = document.querySelector('#time'+orid+'');
   //////////////////////////////////////////
   //chnaged name of timer function to nntimer as it was confused on function call
-  nntimer(ct, display, od, orid);
+  nntimer(ct, display, orid);
   //alert("second timer");
 }
-function nntimer(duration, display, od, orid) {
+function nntimer(duration, display, orid) {
   var timer = duration, minutes, seconds;
   setInterval(function () {
     minutes = parseInt(timer / 60, 10)
@@ -198,13 +190,12 @@ function done(e){
   CTid = $(e).attr("data-cooktime");
   USid = $(e).attr("data-uid");
   $('#cookt'+ORid+'').empty();
-  $('#cookt'+ORid+'').removeClass("redborder");
-  $('#cookt'+ORid+'').removeClass("greenborder");
-  $('#cookt'+ORid+'').removeClass("yellowborder");
+  $('#cookt'+ORid+'').removeClass("content-section");
   $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + USid + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
   data: JSON.stringify({ "$set" : { "status" : "RFD" } }),
   type: "PUT",
   contentType: "application/json" } );
+  updaterfdts(USid);
 }
 
 function pending() {
@@ -284,6 +275,30 @@ function pending() {
     data: JSON.stringify({ "$set" : { "status" : "cooking" } }),
     type: "PUT",
     contentType: "application/json" } );
+    updatects(o_id);
+
+  }
+
+  function updatects(o_id) {
+    var d = new Date().getTime();
+    var dateB = new Date(d);
+    var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+    $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + o_id + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
+    data: JSON.stringify({ "$set" : { "cookts":parseInt(dayRelativeDifference) } }),
+    type: "PUT",
+    contentType: "application/json" } );
+
+  }
+
+  function updaterfdts(o_id) {
+    var d = new Date().getTime();
+    var dateB = new Date(d);
+    var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+    $.ajax( { url: "https://api.mlab.com/api/1/databases/project/collections/order/" + o_id + "?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk",
+    data: JSON.stringify({ "$set" : { "rfdts":parseInt(dayRelativeDifference) } }),
+    type: "PUT",
+    contentType: "application/json" } );
+
   }
 
   // function del(o_id){
@@ -302,13 +317,29 @@ function pending() {
       var output = '';
       $.each(data, function(key, data){
         console.log(data);
-          if(data.status == "pending"){
+        if(data.status == "pending"){
+          console.log(data.Itemlist.length);
         output +=  '<div id="pend'+data.OrderId+'">';
         output += '<article class="media content-section col">';
         output += '<div class="media-body">';
         output += '<div class="well">';
         output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
+        output +=  '<div class="row">';
+        output +=  '<div class="col">';
+        output +=  '<p>Total Item count: ' + data.Itemlist.length + '</p>';
+        output +=  '</div>';
+        output +=  '<div class="col justify-content-end">';
+        output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data._id.$oid+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
+        output +=  '</div>';
+        output +=  '</div>';
+        output +=  '<div class="row">';
+        output +=  '<div class="col">';
+        output +=  '<p> Customer Id: ' + data.Uid + '</p>';
+        output +=  '</div>';
+        output +=  '<div class="col justify-content-end">';
         output +=  '<p> CookTime: ' + data.CookTime + '</p>';
+        output +=  '</div>';
+        output +=  '</div>';
         output +=  '</div>';
         output +=  '<div class="row container">';
         output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-cooktime="'+data.CookTime+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">Move To Cooking</a>';

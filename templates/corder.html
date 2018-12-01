@@ -1,0 +1,346 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row container mx-auto mt-4 mb-4 pt-3" id="parent" style="background: rgba(0,1,4,.6)">
+
+  <article class="media content-section col">
+    <div class="media-body">
+      <div class="container">
+        <div class="row">
+            <legend>
+              <p class="text-center font-Times col border-bottom" style="font-family: Times New Roman, Times, serif";>
+                CURRENT ORDER
+              </p>
+            </legend>
+          <div class="mx-auto">
+            <input class="btn btn-sm btn-primary" style="border-radius: 50px" type="button" onclick="refreshpending()"name="refresher" value="REFRESH">
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row" id="cusorder">
+
+      </div>
+    </div>
+  </article>
+</div>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="bg-modal" style="background-color: rgba(0, 0, 0,0.7); height: 100%;	width: 90%; position: absolute; top: 0; display: none; justify-content: center; align-items: center">
+      <div class="modal-contents mx-auto my-4" style="height: 80%;	width: 60%;	background-color: white;	text-align: center;	padding: 20px;	position: relative;	border-radius: 4px">
+        <div class="close" style="position: absolute; top: 0; right: 10px; font-size: 42px; cursor: pointer"><img class="logo" height="40" src="/static/background/close.svg"/></div><br>
+        <div>
+          <div id="cusaddr">
+
+          </div>
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Item Name</th>
+                <th scope="col">Quantity</th>
+              </tr>
+            </thead>
+            <tbody id="list-form">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script type="text/javascript">
+user_id = document.getElementById("user_id").innerHTML;
+  $("document").ready(function() {
+    getOrders();
+    $('.bg-modal').hide();
+      $('#listpopup').click(function() {
+      document.querySelector('.bg-modal').style.display = "flex";
+      });
+
+      $('.close').click(function() {
+      document.querySelector('.bg-modal').style.display = "none";
+      });
+  });
+
+  function getOrders() {
+    $('#cusorder').empty();
+    $.ajax({
+      url: "https://api.mlab.com/api/1/databases/project/collections/order?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk"
+    }).done(function(data) {
+      var output = '';
+      $.each(data, function(key, data){
+        console.log(data);
+        if (data.Ueid == user_id) {
+          if(data.status == "pending" || data.status == "cooking" || data.status == "RFD" || data.status == "OFD" || data.status == "DC"){
+            console.log(data.Itemlist.length);
+          output +=  '<div class="col" id="pend'+data.OrderId+'">';
+          output += '<article class="media content-section col">';
+          output += '<div class="media-body">';
+          output += '<div class="well">';
+          output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
+          output +=  '<div class="row">';
+          output +=  '<div class="col">';
+          output +=  '<p>Total Item count: ' + data.Itemlist.length + '</p>';
+          output +=  '</div>';
+          output +=  '<div class="col justify-content-end">';
+          output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data._id.$oid+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
+          output +=  '</div>';
+          output +=  '</div>';
+          output +=  '<div>';
+          if (data.status == "pending") {
+            output +=  '<p> Status: Your Order is being Processed</p>';
+          }else if (data.status == "cooking") {
+            output +=  '<p> Status: '+ data.status +'</p>';
+          }else if (data.status == "RFD") {
+            output +=  '<p> Status: Ready For Delivery</p>';
+          }else if (data.status == "OFD") {
+            output +=  '<p> Status: Out For Delivery</p>';
+          }else if (data.status == "DC") {
+            output +=  '<p> Status: Order Delivered</p>';
+          }else {
+            output +=  '<p> Status: Error</p>';
+          }
+          if (data.status == "pending") {
+            var newobj = (data.plcdts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+            var hresu = ((res / 60) - 12);
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if (data.status == "cooking") {
+            var newobj = (data.cookts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+
+            var hresu = ((res / 60) - 12);
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rhresu);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if (data.status == "RFD") {
+            var newobj = (data.rfdts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+
+            var hresu = ((res / 60) - 12);
+
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rhresu);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if (data.status == "OFD") {
+            var newobj = (data.ofdts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+            var hresu = ((res / 60) - 12);
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rhresu);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if(data.status == "DC"){
+            var newobj = (data.dcts);
+            var hours = ((newobj / 60) - 12)
+            rhours = Math.floor(hours);
+            var minutes = (hours - rhours) * 60;
+            rminutes = Math.round(minutes);
+            output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
+          }
+          else {
+            output +=  '<p>Estimated Time of Arrival: Error</p>';
+          }
+          output +=  '</div>';
+          output +=  '</div>';
+          output +=  '</div>';
+          output += '</article>';
+          output +=  '</div>';
+        }
+        }
+      });
+      $('#cusorder').append(output);
+    });
+  }
+
+  function itemLIST(e) {
+    $('.bg-modal').show();
+      $('#list-form').empty();
+    oid = $(e).attr("data-id");
+    console.log(oid);
+  console.log("list");
+  $.ajax({
+    url: "https://api.mlab.com/api/1/databases/project/collections/order?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk"
+  }).done(function(data) {
+    var ItemL = '';
+    var cusadr = '';
+    $.each(data, function(key, data){
+        if(data._id.$oid == oid ){
+          cusadr = '<p> Address: ' + data.address + '</p>';
+          for(var i = 0; i < data.Itemlist.length; i++){
+            var itemid = data.Itemlist[i].Itemname;
+            console.log(itemid);
+            var qnty = data.Itemlist[i].Qty;
+             ItemL += '<tr>';
+             ItemL += '<td>';
+             ItemL += itemid;
+             ItemL += '</td>';
+             ItemL += '<td>';
+             ItemL +=  qnty;
+             ItemL += '</td>';
+             ItemL += '</tr>';
+            $('#list-form').html(ItemL);
+            $('#cusaddr').html(cusadr);
+          }
+    }
+    });
+  });
+  }
+
+  function refreshpending() {
+    $('#cusorder').empty();
+    $.ajax({
+      url: "https://api.mlab.com/api/1/databases/project/collections/order?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk"
+    }).done(function(data) {
+      var output = '';
+      $.each(data, function(key, data){
+        console.log(data);
+        if (data.Ueid == user_id) {
+          if(data.status == "pending" || data.status == "cooking" || data.status == "RFD" || data.status == "OFD" || data.status == "DC"){
+            console.log(data.Itemlist.length);
+          output +=  '<div class="col" id="pend'+data.OrderId+'">';
+          output += '<article class="media content-section col">';
+          output += '<div class="media-body">';
+          output += '<div class="well">';
+          output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
+          output +=  '<div class="row">';
+          output +=  '<div class="col">';
+          output +=  '<p>Total Item count: ' + data.Itemlist.length + '</p>';
+          output +=  '</div>';
+          output +=  '<div class="col justify-content-end">';
+          output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data._id.$oid+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
+          output +=  '</div>';
+          output +=  '</div>';
+          output +=  '<div>';
+          if (data.status == "pending") {
+            output +=  '<p> Status: Your Order is being Processed</p>';
+          }else if (data.status == "cooking") {
+            output +=  '<p> Status: '+ data.status +'</p>';
+          }else if (data.status == "RFD") {
+            output +=  '<p> Status: Ready For Delivery</p>';
+          }else if (data.status == "OFD") {
+            output +=  '<p> Status: Out For Delivery</p>';
+          }else if (data.status == "DC") {
+            output +=  '<p> Status: Order Delivered</p>';
+          }else {
+            output +=  '<p> Status: Error</p>';
+          }
+          if (data.status == "pending") {
+            var newobj = (data.plcdts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+            var hresu = ((res / 60) - 12);
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if (data.status == "cooking") {
+            var newobj = (data.cookts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+
+            var hresu = ((res / 60) - 12);
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rhresu);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if (data.status == "RFD") {
+            var newobj = (data.rfdts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+
+            var hresu = ((res / 60) - 12);
+
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rhresu);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if (data.status == "OFD") {
+            var newobj = (data.ofdts);
+            var d = new Date().getTime();
+            var dateB = new Date(d);
+            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+            console.log(dayRelativeDifference);
+            res = (dayRelativeDifference + newobj) - data.expETA ;
+            console.log(res);
+            var hresu = ((res / 60) - 12);
+            rhresu = Math.floor(hresu);
+            var minutes = (hresu - rhresu) * 60;
+            rminutes = Math.round(minutes);
+            console.log(rhresu);
+            console.log(rminutes);
+            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          }else if(data.status == "DC"){
+            var newobj = (data.dcts);
+            var hours = ((newobj / 60) - 12)
+            rhours = Math.floor(hours);
+            var minutes = (hours - rhours) * 60;
+            rminutes = Math.round(minutes);
+            output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
+          }
+          else {
+            output +=  '<p>Estimated Time of Arrival: Error</p>';
+          }
+          output +=  '</div>';
+          output +=  '</div>';
+          output +=  '</div>';
+          output += '</article>';
+          output +=  '</div>';
+        }
+        }
+      });
+      $('#cusorder').append(output);
+    });
+    }
+</script>
+{% endblock content %}

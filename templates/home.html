@@ -3,7 +3,7 @@
 <div class="container-fluid mt-4 mb-5 pb-5" id="menupage" style="background: rgba(0,1,4,.6)">
   <br>
   <legend class="border-bottom text-white font-italic" style="font-family: Times New Roman, Times, serif"><h1 class="font-weight-bold text-white">Welcome to Muse</h1>
-  <p>Open Hours: 10:30AM - 9:00PM</p>
+  <p>Open Hours: 01:00PM - 10:00PM</p>
   </legend>
   <br>
   <div class="container text-center mx-auto">
@@ -24,6 +24,9 @@
   <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-RCD" role="tabpanel" aria-labelledby="pills-RCD-tab">
       <div>
+        <div class="mx-auto">
+          <h4 class="text-white text-center">(served with rice, salad, and multigrain roll)</h4>
+        </div>
         {% for e in posts %}
         <div class="row container mx-auto">
           <div class="media content-section bg-danger" >
@@ -53,6 +56,9 @@
     </div>
     <div class="tab-pane fade" id="pills-Pizzas" role="tabpanel" aria-labelledby="pills-Pizzas-tab">
       <div>
+        <div class="mx-auto">
+          <h4 class="text-white text-center">(one size Large)</h4>
+        </div>
         {% for e in result %}
         <div class="row container mx-auto">
           <div class="media content-section bg-danger" >
@@ -82,6 +88,9 @@
     </div>
     <div class="tab-pane fade" id="pills-Sandwiches" role="tabpanel" aria-labelledby="pills-Sandwiches-tab">
       <div>
+        <div class="mx-auto">
+          <h4 class="text-white text-center">(served with potato wedges)</h4>
+        </div>
         {% for e in name %}
         <div class="row container mx-auto">
           <div class="media content-section bg-danger" >
@@ -114,6 +123,9 @@
   <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active " id="pills-RCD" role="tabpanel" aria-labelledby="pills-RCD-tab">
       <div>
+        <div class="mx-auto">
+          <h4 class="text-white text-center">(served with rice, salad, and multigrain roll)</h4>
+        </div>
         {% for e in posts %}
         <div class="row container mx-auto">
           <div class="media content-section bg-danger" >
@@ -140,6 +152,9 @@
   </div>
     <div class="tab-pane fade" id="pills-Pizzas" role="tabpanel" aria-labelledby="pills-Pizzas-tab">
       <div>
+        <div class="mx-auto">
+          <h4 class="text-white text-center">(one size Large)</h4>
+        </div>
         {% for e in result %}
         <div class="row container mx-auto">
           <div class="media content-section bg-danger" >
@@ -166,6 +181,9 @@
     </div>
     <div class="tab-pane fade" id="pills-Sandwiches" role="tabpanel" aria-labelledby="pills-Sandwiches-tab">
       <div>
+        <div class="mx-auto">
+          <h4 class="text-white text-center">(served with potato wedges)</h4>
+        </div>
         {% for e in name %}
         <div class="row container mx-auto">
           <div class="media content-section bg-danger" >
@@ -212,12 +230,27 @@
           var obj = JSON.parse(res);
           console.log(res);
           newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA;
+          var d = new Date().getTime();
+          var dateB = new Date(d);
+          var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+          console.log(dayRelativeDifference);
+          pts = dayRelativeDifference;
+          resu = dayRelativeDifference + newobj;
+          console.log(resu);
+          var hours = ((resu / 60) - 12);
+          rhours = Math.floor(hours);
+          var minutes = (hours - rhours) * 60;
+          rminutes = Math.round(minutes);
+          console.log(rhours);
+          console.log(rminutes);
 
           document.getElementById("review_addr").innerHTML = "Your order will be sent to : "+ obj.address;
 
-          document.getElementById("review_ETA").innerHTML = "Estimated Time: "+ newobj;
+          document.getElementById("review_ETA").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
 
-          document.getElementById("review_price").innerHTML = "Total price: $"+ totp;
+          document.getElementById("review_tax").innerHTML = "Tax: $"+ totax;
+          document.getElementById("review_total").innerHTML = "Total: $"+ topr;
+          document.getElementById("review_grandtot").innerHTML = "Grant Total: $"+ totp;
 
           // var cont = document.getElementById("cart_content").innerHTML;
           // document.getElementById("review_item").innerHTML = cont;

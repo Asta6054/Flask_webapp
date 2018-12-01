@@ -1,86 +1,40 @@
 {% extends "adminlayout.html" %}
 {% block content1 %}
-<div class="row container" style="background: rgba(0,1,4,.6)">
-  <article class="media content-section col" style="background: rgba(253,251,251,.8)">
-	  <div class="media-body">
-	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
-	  		PENDING
-	  	</p>
-	  	{% for e in order %}
-	  	 <div style="background: rgba(0,0,0,0)" >
-         <article class="media content-section col">
-           <div class="media-body">
-             <div class="well">
-               <h3>OrderId: {{ e['OrderId']}} </h3>
-               <p>Customer Id: {{ e['Uid']}}</p>
-               <p>Itemlist: {{ e['Itemlist']}}</p>
-               <p>ETA: {{ e['CustomerETA']}}</p>
-             </div>
-           </div>
-         </article>
-	  	  </div>
-        {% endfor %}
-       </div>
-	</article>
-	<article class="media content-section col" style="background: rgba(253,251,251,.8)">
-	  <div class="media-body">
-	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
-	  		COOKING
-	  	</p>
-	    {% for e in Corder %}
-	  	 <div style="background: rgba(0,0,0,0)" >
-         <article class="media content-section col">
-           <div class="media-body">
-             <div class="well">
-               <h3>OrderId: {{ e['OrderId']}} </h3>
-               <p>Customer Id: {{ e['Uid']}}</p>
-               <p>ETA: {{ e['CustomerETA']}}</p>
-             </div>
-           </div>
-         </article>
-	  	  </div>
-        {% endfor %}
-	  </div>
-	</article>
-  <article class="media content-section col" style="background: rgba(253,251,251,.8)">
-	  <div class="media-body">
-	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
-	  		READY FOR DELIVERY
-	  	</p>
-	  	{% for e in rorder %}
-	  	 <div style="background: rgba(0,0,0,0)" >
-         <article class="media content-section col">
-           <div class="media-body">
-             <div class="well">
-               <h3>OrderId: {{ e['OrderId']}} </h3>
-               <p>Customer Id: {{ e['Uid']}}</p>
-               <p>ETA: {{ e['CustomerETA']}}</p>
-             </div>
-           </div>
-         </article>
-	  	  </div>
-        {% endfor %}
-       </div>
-	</article>
-	<article class="media content-section col" style="background: rgba(253,251,251,.8)">
-	  <div class="media-body">
-	  	<p class="border-bottom text-center font-Times" style="font-family: Times New Roman, Times, serif";>
-	  		COMPLETED
-	  	</p>
-	    {% for e in Coorder %}
-	  	 <div style="background: rgba(0,0,0,0)" >
-         <article class="media content-section col">
-           <div class="media-body">
-             <div class="well">
-               <h3>OrderId: {{ e['OrderId']}} </h3>
-               <p>Customer Id: {{ e['Uid']}}</p>
-               <p>ETA: {{ e['CustomerETA']}}</p>
-             </div>
-           </div>
-         </article>
-	  	  </div>
-        {% endfor %}
-	  </div>
-	</article>
- </div>
+<div class="container mt-4 mb-5 p-2" style="background: rgba(0,1,4,.6)">
+        <div class="card-deck">
+
+                <div class="card my-2">
+                    <div class="card-block p-2" style="background: rgba(0,68,68,0.3)">
+                        <h4 class="card-title text-capitalize font-italic">View Orders Placed</h4>
+                        <p class="card-text">Click Open to view.</p>
+                        <a href="{{ url_for('vop') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+
+
+                <div class="card my-2">
+                    <div class="card-block p-2" style="background: rgba(0,68,68,0.3)">
+                      <h4 class="card-title text-capitalize font-italic">View Orders Being Cooked</h4>
+                      <p class="card-text">Click Open to view.</p>
+                      <a href="{{ url_for('voc') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+
+                <div class="card my-2">
+                    <div class="card-block p-2 text-capitalize" style="background: rgba(0,68,68,0.3)">
+                        <h4 class="card-title font-italic">View Orders Ready For Delivery</h4>
+                        <p class="card-text ">Click Open to view.</p>
+                        <a href="{{ url_for('vor') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+
+                <div class="card my-2">
+                    <div class="card-block p-2 text-capitalize" style="background: rgba(0,68,68,0.3)">
+                        <h4 class="card-title font-italic">View Completed Deliveries</h4>
+                        <p class="card-text ">Click Open to view.</p>
+                        <a href="{{ url_for('vod') }}" class="btn btn-primary rounded mb-2">Open</a>
+                    </div>
+                </div>
+        </div>
+    </div>
 {% endblock content1 %}
