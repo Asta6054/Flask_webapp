@@ -94,10 +94,16 @@ function getOrders() {
       }
       if(data.status == "DC"){
         var newobj = (data.dcts);
-        var hours = ((newobj / 60) - 12)
+        var oldeta = (data.expETA);
+        var hrs = ((newobj / 60) - 12);
+        rhrs = Math.floor(hrs);
+        var hours = ((newobj / 60) - 12);
         rhours = Math.floor(hours);
+        var mins = (hrs - rhrs) * 60;
+        rmins = Math.round(mins);
         var minutes = (hours - rhours) * 60;
         rminutes = Math.round(minutes);
+        output +=  '<p>Order ETA: ' +rhrs+':'+rmins+ 'pm</p>';
         output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
       }
       else {
@@ -179,10 +185,16 @@ function refreshpending() {
       }
       if(data.status == "DC"){
         var newobj = (data.dcts);
-        var hours = ((newobj / 60) - 12)
+        var oldeta = (data.expETA);
+        var hrs = ((newobj / 60) - 12);
+        rhrs = Math.floor(hrs);
+        var hours = ((newobj / 60) - 12);
         rhours = Math.floor(hours);
+        var mins = (hrs - rhrs) * 60;
+        rmins = Math.round(mins);
         var minutes = (hours - rhours) * 60;
         rminutes = Math.round(minutes);
+        output +=  '<p>Order ETA: ' +rhrs+':'+rmins+ 'pm</p>';
         output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
       }
       else {
