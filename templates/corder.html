@@ -117,8 +117,6 @@ user_id = document.getElementById("user_id").innerHTML;
             output +=  '<p> Status: Ready For Delivery</p>';
           }else if (data.status == "OFD") {
             output +=  '<p> Status: Out For Delivery</p>';
-          }else if (data.status == "DC") {
-            output +=  '<p> Status: Order Delivered</p>';
           }else {
             output +=  '<p> Status: Error</p>';
           }
@@ -130,13 +128,6 @@ user_id = document.getElementById("user_id").innerHTML;
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "OFD") {
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
-          }else if(data.status == "DC"){
-            var newobj = (data.dcts);
-            var hours = ((newobj / 60) - 12)
-            rhours = Math.floor(hours);
-            var minutes = (hours - rhours) * 60;
-            rminutes = Math.round(minutes);
-            output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
           }
           else {
             output +=  '<p>Estimated Time of Arrival: Error</p>';
@@ -253,8 +244,6 @@ user_id = document.getElementById("user_id").innerHTML;
             output +=  '<p> Status: Ready For Delivery</p>';
           }else if (data.status == "OFD") {
             output +=  '<p> Status: Out For Delivery</p>';
-          }else if (data.status == "DC") {
-            output +=  '<p> Status: Order Delivered</p>';
           }else {
             output +=  '<p> Status: Error</p>';
           }
@@ -266,13 +255,6 @@ user_id = document.getElementById("user_id").innerHTML;
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "OFD") {
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
-          }else if(data.status == "DC"){
-            var newobj = (data.dcts);
-            var hours = ((newobj / 60) - 12)
-            rhours = Math.floor(hours);
-            var minutes = (hours - rhours) * 60;
-            rminutes = Math.round(minutes);
-            output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
           }
           else {
             output +=  '<p>Estimated Time of Arrival: Error</p>';

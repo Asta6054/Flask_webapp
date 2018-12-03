@@ -95,7 +95,7 @@ function getOrders() {
       if(data.status == "DC"){
         var newobj = (data.dcts);
         var oldeta = (data.expETA);
-        var hrs = ((newobj / 60) - 12);
+        var hrs = ((oldeta / 60) - 12);
         rhrs = Math.floor(hrs);
         var hours = ((newobj / 60) - 12);
         rhours = Math.floor(hours);
