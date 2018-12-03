@@ -94,7 +94,7 @@
         <!-- Navbar Right Side -->
           <ul class="nav navbar-nav">
           {% if 'user' in session %}
-          <li><a href="{{url_for('useraccountpage')}}"><img class="logo" height="45" src="/static/background/ua2.png"/><p id="user_id" class="badge text-white">{{session['user']}}</p></a></li>
+          <li><a href="{{url_for('useraccountpage')}}"><img class="logo" height="45" src="/static/background/ua2.png"/><p id="user_id" class="badge text-white">{{session['uid']}}</p></a></li>
           <li><a class="nav-item nav-link text-white nvbrt border-right border-danger" href="{{ url_for('logout') }}">Logout</a></li><hr class="vrline">
           <li class="bg-danger" style="border-radius:20px; height:40px " ><a onclick="pop_cart()"><img class="logo" height="40" src="/static/background/cart3.svg"/><div class="bg-danger badge text-white" id='cart_count' style="border-radius: 12px">0</div></a></li>
           {% else %}

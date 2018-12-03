@@ -140,6 +140,7 @@ def login():
                         next_page = request.args.get('next')
                         session['user'] = form.email.data
                         session['role'] = lgin_user['role']
+                        session['uid'] = lgin_user['username']
                         if (lgin_user['role'] == 'admin'):
                             return redirect(url_for('admin'))
                         elif(lgin_user['role'] == 'kitchen'):
