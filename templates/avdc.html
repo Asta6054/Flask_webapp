@@ -103,8 +103,16 @@ function getOrders() {
         rmins = Math.round(mins);
         var minutes = (hours - rhours) * 60;
         rminutes = Math.round(minutes);
-        output +=  '<p>Order ETA: ' +rhrs+':'+rmins+ 'pm</p>';
-        output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
+        if(rhours < 10 && rminutes < 10 || rhrs < 10 && rmins < 10){
+          output +=  '<p>Order ETA: 0' +rhrs+':0'+rmins+ 'pm</p>';
+          output +=  '<p>Order Delivered By: 0' +rhours+':0'+rminutes+ 'pm</p>';
+        }else if(rhours < 10 && rminutes > 10 || rhrs < 10 && rmins > 10){
+          output +=  '<p>Order ETA: 0' +rhrs+':'+rmins+ 'pm</p>';
+          output +=  '<p>Order Delivered By: 0' +rhours+':'+rminutes+ 'pm</p>';
+        }else {
+          output +=  '<p>Order ETA: ' +rhrs+':'+rmins+ 'pm</p>';
+          output +=  '<p>Order Delivered By: ' +rhours+':'+rminutes+ 'pm</p>';
+        }
       }
       else {
         output +=  '<p>Estimated Time of Arrival: Error</p>';

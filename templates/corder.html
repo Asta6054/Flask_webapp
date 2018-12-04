@@ -123,11 +123,11 @@ user_id = document.getElementById("user_id").innerHTML;
           if (data.status == "pending") {
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "cooking") {
-            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="getctime(this)">Get ETA</a>';
           }else if (data.status == "RFD") {
-            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="getrfdtime(this)">Get ETA</a>';
           }else if (data.status == "OFD") {
-            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="getrfdtime(this)">Get ETA</a>';
           }
           else {
             output +=  '<p>Estimated Time of Arrival: Error</p>';
@@ -157,6 +157,7 @@ user_id = document.getElementById("user_id").innerHTML;
         var obj = JSON.parse(res);
         console.log(res);
         newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA+obj.cETA;
+        console.log("hello",newobj);
         var d = new Date().getTime();
         var dateB = new Date(d);
         var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
@@ -182,6 +183,86 @@ user_id = document.getElementById("user_id").innerHTML;
         }
     });
   }
+
+  function getctime(e) {
+    $('.bg-modaler').show();
+    $('#time-form').empty();
+    orid = $(e).attr("data-id");
+    $.ajax({
+      type: "POST",
+      url: "/new_time?info="+orid+"",
+      datatype: 'json',
+      // data: "formname="+formname+"&status="+status,
+      success: function(res){
+        var obj = JSON.parse(res);
+        console.log(res);
+        newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5);
+        console.log("hello",newobj);
+        var d = new Date().getTime();
+        var dateB = new Date(d);
+        var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+        console.log(dayRelativeDifference);
+        pts = dayRelativeDifference;
+        resu = dayRelativeDifference + newobj;
+        console.log(resu);
+        var hours = ((resu / 60) - 12);
+        rhours = Math.floor(hours);
+        var minutes = (hours - rhours) * 60;
+        rminutes = Math.round(minutes);
+        console.log(rhours);
+        console.log(rminutes);
+        if(rhours < 10 && rminutes < 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
+        }else if(rhours < 10 && rminutes > 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":"+rminutes;
+        }else {
+          document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+        }
+
+
+        }
+    });
+  }
+  function getrfdtime(e) {
+    $('.bg-modaler').show();
+    $('#time-form').empty();
+    orid = $(e).attr("data-id");
+    $.ajax({
+      type: "POST",
+      url: "/new_time?info="+orid+"",
+      datatype: 'json',
+      // data: "formname="+formname+"&status="+status,
+      success: function(res){
+        var obj = JSON.parse(res);
+        console.log(res);
+        newobj = (parseInt(obj.distanceETA)+5);
+        console.log("hello",newobj);
+        var d = new Date().getTime();
+        var dateB = new Date(d);
+        var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
+        console.log(dayRelativeDifference);
+        pts = dayRelativeDifference;
+        resu = dayRelativeDifference + newobj;
+        console.log(resu);
+        var hours = ((resu / 60) - 12);
+        rhours = Math.floor(hours);
+        var minutes = (hours - rhours) * 60;
+        rminutes = Math.round(minutes);
+        console.log(rhours);
+        console.log(rminutes);
+        if(rhours < 10 && rminutes < 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
+        }else if(rhours < 10 && rminutes > 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":"+rminutes;
+        }else {
+          document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+        }
+
+
+        }
+    });
+  }
+
 
   function itemLIST(e) {
     $('.bg-modal').show();

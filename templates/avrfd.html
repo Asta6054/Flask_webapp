@@ -145,7 +145,7 @@
       success: function(res){
         var obj = JSON.parse(res);
         console.log(res);
-        newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA+obj.cETA;
+        newobj = (parseInt(obj.distanceETA)+5);
         var d = new Date().getTime();
         var dateB = new Date(d);
         var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
@@ -160,7 +160,14 @@
         console.log(rhours);
         console.log(rminutes);
 
-        document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+        if(rhours < 10 && rminutes < 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
+        }else if(rhours < 10 && rminutes > 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":"+rminutes;
+        }else {
+          document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+        }
+
         }
     });
   }

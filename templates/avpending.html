@@ -160,7 +160,13 @@
         console.log(rhours);
         console.log(rminutes);
 
-        document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+        if(rhours < 10 && rminutes < 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
+        }else if(rhours < 10 && rminutes > 10){
+          document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":"+rminutes;
+        }else {
+          document.getElementById("time-form").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+        }
 
         }
     });
@@ -234,19 +240,7 @@
             output +=  '<p> Status: Error</p>';
           }
           if (data.status == "pending") {
-            var newobj = (data.plcdts);
-            var d = new Date().getTime();
-            var dateB = new Date(d);
-            var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-            console.log(dayRelativeDifference);
-            res = (dayRelativeDifference + newobj) - data.expETA ;
-            console.log(res);
-            var hresu = ((res / 60) - 12);
-            rhresu = Math.floor(hresu);
-            var minutes = (hresu - rhresu) * 60;
-            rminutes = Math.round(minutes);
-            console.log(rminutes);
-            output +=  '<p>Estimated Time of Arrival: ' +rhresu+':'+rminutes+ 'pm</p>';
+          output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else {
             output +=  '<p>Estimated Time of Arrival: Error</p>';
           }
