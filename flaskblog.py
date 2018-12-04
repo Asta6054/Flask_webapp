@@ -622,7 +622,7 @@ def reviewAjax():
     print (time_list, "max:", cook_time)
     user_email = request.args.get('user')
     # print (user_email)
-    user = mongo.db.login.find_one({'email' : user_email})
+    user = mongo.db.login.find_one({'username' : user_email})
     pipeline = [{ '$match':{'status':"pending"}},{ '$group':{'_id':"$status",'total':{'$sum': "$CookTime"}}}]
     cursor = order.aggregate(pipeline,allowDiskUse = False)
     if order.count() != 0:
