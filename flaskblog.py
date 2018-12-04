@@ -712,7 +712,7 @@ def upload_m():
 
     cook_time ="%d" % (max(time_list))
     print (time_list, "max:", cook_time)
-    order.insert_one({"Uid": user['username'], "Ueid": username, "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : int(cook_time),
+    order.insert_one({"Uid": user['username'], "Ueid": user['email'], "OrderId" : count_order, "Itemlist": item_str2,'TotalPrice' : price, 'CookTime' : int(cook_time),
     'distanceETA' : user['ETA'], 'status' : order_status, 'address':user['address'], 'contact':user['telephone'],
      'CustomerETA': cusETA, 'distance':user['distance'], 'expETA':int(ETAresu), 'plcdts':int(placedts) , 'cookts':'blank', 'rfdts':'blank', 'ofdts':'blank', 'dcts':'blank'})
 
