@@ -656,7 +656,7 @@ def upload_m():
     username = request.args.get("username")
     print(username)
     placedts = request.args.get("plcdts")
-    user = mongo.db.login.find_one({'email' : username})
+    user = mongo.db.login.find_one({'username' : username})
     items = info.split(";")[:-1]
     item_str = []
     qty = ""
