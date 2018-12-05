@@ -28,9 +28,11 @@ function ready_for_delivery() {
       output +=  '<p> Customer ID: ' + data.Uid + '</p>';
       output +=  '<p> Address: ' + data.address + '</p>';
       output +=  '<p> Contact: ' + data.contact + '</p>';
+      output +=  '<p> Delivery Type : Cash On Delivery (COD)</p>';
+      output +=  '<p> Grand Total: $' + data.TotalPrice + '</p>';
       output +=  '</div>';
       output +=  '<div class="row container">';
-      output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-userid="'+data.Uid+'" data-dis="'+data.distance+'" data-dETA="'+data.distanceETA+'" data-address="'+data.address+'" data-contact="'+data.contact+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
+      output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-total="'+data.TotalPrice+'" data-userid="'+data.Uid+'" data-dis="'+data.distance+'" data-dETA="'+data.distanceETA+'" data-address="'+data.address+'" data-contact="'+data.contact+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
       output +=  '</div>';
       output +=  '</div>';
       output += '</article>';
@@ -60,9 +62,11 @@ function refreshpending1() {
         output +=  '<p> Customer ID: ' + data.Uid + '</p>';
         output +=  '<p> Address: ' + data.address + '</p>';
         output +=  '<p> Contact: ' + data.contact + '</p>';
+        output +=  '<p> Delivery Type : Cash On Delivery (COD)</p>';
+        output +=  '<p> Grand Total: $' + data.TotalPrice + '</p>';
         output +=  '</div>';
         output +=  '<div class="row container">';
-        output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-userid="'+data.Uid+'" data-dis="'+data.distance+'" data-dETA="'+data.distanceETA+'" data-address="'+data.address+'" data-contact="'+data.contact+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
+        output +=  '<a onclick="to(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-total="'+data.TotalPrice+'" data-userid="'+data.Uid+'" data-dis="'+data.distance+'" data-dETA="'+data.distanceETA+'" data-address="'+data.address+'" data-contact="'+data.contact+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">GO</a>';
         output +=  '</div>';
         output +=  '</div>';
         output += '</article>';
@@ -82,10 +86,11 @@ function refreshpending1() {
     var con = $(e).attr("data-contact");
     var dis = $(e).attr("data-dis");
     var dETA = $(e).attr("data-dETA");
+    var tp = $(e).attr("data-total");
     ins(o_id);
     updateofdts(o_id);
     $('#ready'+o_id+'').empty();
-    out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA);
+    out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA,tp);
     // ready_for_delivery(o_id,or_id);
     // out_for_delivery(o_id,or_id)
     // refresh(ct);
@@ -109,7 +114,7 @@ function refreshpending1() {
 
   }
 
-function out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA)  {
+function out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA,tp)  {
 	  var coutput = '';
   coutput += '<div id="out'+o_id+'">'
   coutput += '<article class="media content-section col">';
@@ -120,6 +125,8 @@ function out_for_delivery(o_id,or_id,adr,con,u_id,dis,dETA)  {
   coutput +=  '<p> Customer ID: ' + u_id + '</p>';
   coutput +=  '<p> Address: ' + adr + '</p>';
   coutput +=  '<p> Contact: ' + con + '</p>';
+  coutput +=  '<p> Delivery Type : Cash On Delivery (COD)</p>';
+  coutput +=  '<p> Grand Total: $' + tp + '</p>';
   coutput +=  '<div class="container">';
   coutput += '<button class="btn btn-sm btn-success col" style="border-radius: 50px" data-orderid="'+or_id+'" data-uid="'+o_id+'" id="ordercomplete" onclick="complete(this)">Delivery Completed</button>';
   coutput += '</div>';
