@@ -347,7 +347,7 @@ function pending() {
         output +=  '</div>';
         output +=  '</div>';
         output +=  '<div class="row container">';
-        output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-cooktime="'+data.CookTime+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">Move To Cooking</a>';
+        output +=  '<a onclick="cooking2(this)" id="'+data._id.$oid+'" style="border-radius: 50px" data-cooktime="'+data.CookTime+'" data-Uid="'+data.Uid+'" data-orderid="'+data.OrderId+'" class="btn text-white btn-primary btn-small col">Move To Cooking</a>';
         output +=  '</div>';
         output +=  '</div>';
         output += '</article>';

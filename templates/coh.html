@@ -17,7 +17,7 @@
         </div>
       </div>
       <br>
-      <div class="row" id="cusorder">
+      <div id="cusorder">
 
       </div>
     </div>
@@ -71,7 +71,7 @@ function getOrders() {
     var output = '';
     $.each(data, function(key, data){
       console.log(data);
-      if (data.Ueid == user_id) {
+      if (data.Uid == user_id) {
       if(data.status == "DC"){
         console.log(data.Itemlist.length);
       output +=  '<div class="col" id="pend'+data.OrderId+'">';
