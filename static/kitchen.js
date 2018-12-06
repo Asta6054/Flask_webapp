@@ -219,7 +219,18 @@ function pending() {
       output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
       output +=  '<div class="row">';
       output +=  '<div class="col">';
-      output +=  '<p>Total Item count: ' + data.Itemlist.length + '</p>';
+      icount =0;
+      for(var i = 0; i < data.Itemlist.length; i++){
+       var count = data.Itemlist[i].Qty ;
+      icount = icount + parseInt(count);
+      if (data.Itemlist.length == parseInt(icount)) {
+        tcount = (data.Itemlist.length);
+      }else {
+        tcount = (icount);
+      }
+
+      }
+      output +=  '<p>Total Item count: ' + tcount + '</p>';
       output +=  '</div>';
       output +=  '<div class="col justify-content-end">';
       output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data._id.$oid+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
@@ -331,7 +342,18 @@ function pending() {
         output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
         output +=  '<div class="row">';
         output +=  '<div class="col">';
-        output +=  '<p>Total Item count: ' + data.Itemlist.length + '</p>';
+        icount =0;
+        for(var i = 0; i < data.Itemlist.length; i++){
+         var count = data.Itemlist[i].Qty ;
+        icount = icount + parseInt(count);
+        if (data.Itemlist.length == parseInt(icount)) {
+          tcount = (data.Itemlist.length);
+        }else {
+          tcount = (icount);
+        }
+
+      }
+        output +=  '<p>Total Item count: ' + tcount + '</p>';
         output +=  '</div>';
         output +=  '<div class="col justify-content-end">';
         output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data._id.$oid+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
