@@ -91,10 +91,9 @@ user_id = document.getElementById("user_id").innerHTML;
     }).done(function(data) {
       var output = '';
       $.each(data, function(key, data){
-        console.log(data);
+        data);
         if (data.Uid == user_id) {
           if(data.status == "pending" || data.status == "cooking" || data.status == "RFD" || data.status == "OFD"){
-            console.log(data.Itemlist.length);
           output +=  '<div class="col" id="pend'+data.OrderId+'">';
           output += '<article class="media content-section col">';
           output += '<div class="media-body">';
@@ -102,7 +101,18 @@ user_id = document.getElementById("user_id").innerHTML;
           output +=  '<h3>OrderId: '+ data.OrderId + '</h3>';
           output +=  '<div class="row">';
           output +=  '<div class="col">';
-          output +=  '<p>Total Item count: ' + data.Itemlist.length + '</p>';
+          icount =0;
+          for(var i = 0; i < data.Itemlist.length; i++){
+           var count = data.Itemlist[i].Qty ;
+          icount = icount + parseInt(count);
+          if (data.Itemlist.length == parseInt(icount)) {
+            tcount = (data.Itemlist.length);
+          }else {
+            tcount = (icount);
+          }
+
+        }
+          output +=  '<p>Total Item count: ' + tcount + '</p>';
           output +=  '</div>';
           output +=  '<div class="col justify-content-end">';
           output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data._id.$oid+'" id="listpopup" onclick="itemLIST(this)">Item List</a>';
@@ -155,22 +165,21 @@ user_id = document.getElementById("user_id").innerHTML;
       // data: "formname="+formname+"&status="+status,
       success: function(res){
         var obj = JSON.parse(res);
-        console.log(res);
+
         newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5)+obj.pETA+obj.cETA;
-        console.log("hello",newobj);
+
         var d = new Date().getTime();
         var dateB = new Date(d);
         var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-        console.log(dayRelativeDifference);
+
         pts = dayRelativeDifference;
         resu = dayRelativeDifference + newobj;
-        console.log(resu);
+
         var hours = ((resu / 60) - 12);
         rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
         rminutes = Math.round(minutes);
-        console.log(rhours);
-        console.log(rminutes);
+
         if(rhours < 10 && rminutes < 10){
           document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
         }else if(rhours < 10 && rminutes > 10){
@@ -195,22 +204,21 @@ user_id = document.getElementById("user_id").innerHTML;
       // data: "formname="+formname+"&status="+status,
       success: function(res){
         var obj = JSON.parse(res);
-        console.log(res);
+
         newobj = parseInt(obj.time)+(parseInt(obj.distanceETA)+5);
-        console.log("hello",newobj);
+
         var d = new Date().getTime();
         var dateB = new Date(d);
         var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-        console.log(dayRelativeDifference);
+
         pts = dayRelativeDifference;
         resu = dayRelativeDifference + newobj;
-        console.log(resu);
+
         var hours = ((resu / 60) - 12);
         rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
         rminutes = Math.round(minutes);
-        console.log(rhours);
-        console.log(rminutes);
+
         if(rhours < 10 && rminutes < 10){
           document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
         }else if(rhours < 10 && rminutes > 10){
@@ -234,22 +242,21 @@ user_id = document.getElementById("user_id").innerHTML;
       // data: "formname="+formname+"&status="+status,
       success: function(res){
         var obj = JSON.parse(res);
-        console.log(res);
+
         newobj = (parseInt(obj.distanceETA)+5);
-        console.log("hello",newobj);
+
         var d = new Date().getTime();
         var dateB = new Date(d);
         var dayRelativeDifference =   dateB.getHours()*60 + dateB.getMinutes();
-        console.log(dayRelativeDifference);
+
         pts = dayRelativeDifference;
         resu = dayRelativeDifference + newobj;
-        console.log(resu);
+
         var hours = ((resu / 60) - 12);
         rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
         rminutes = Math.round(minutes);
-        console.log(rhours);
-        console.log(rminutes);
+
         if(rhours < 10 && rminutes < 10){
           document.getElementById("time-form").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
         }else if(rhours < 10 && rminutes > 10){
@@ -268,8 +275,6 @@ user_id = document.getElementById("user_id").innerHTML;
     $('.bg-modal').show();
       $('#list-form').empty();
     oid = $(e).attr("data-id");
-    console.log(oid);
-  console.log("list");
   $.ajax({
     url: "https://api.mlab.com/api/1/databases/project/collections/order?apiKey=GNjNdN6lUgcrRk7d8vo9AfreQewjHePk"
   }).done(function(data) {
@@ -280,7 +285,7 @@ user_id = document.getElementById("user_id").innerHTML;
           cusadr = '<p> Address: ' + data.address + '</p>';
           for(var i = 0; i < data.Itemlist.length; i++){
             var itemid = data.Itemlist[i].Itemname;
-            console.log(itemid);
+
             var qnty = data.Itemlist[i].Qty;
              ItemL += '<tr>';
              ItemL += '<td>';
@@ -305,10 +310,10 @@ user_id = document.getElementById("user_id").innerHTML;
     }).done(function(data) {
       var output = '';
       $.each(data, function(key, data){
-        console.log(data);
-        if (data.Ueid == user_id) {
+
+        if (data.Uid == user_id) {
           if(data.status == "pending" || data.status == "cooking" || data.status == "RFD" || data.status == "OFD"){
-            console.log(data.Itemlist.length);
+
           output +=  '<div class="col" id="pend'+data.OrderId+'">';
           output += '<article class="media content-section col">';
           output += '<div class="media-body">';
@@ -337,11 +342,11 @@ user_id = document.getElementById("user_id").innerHTML;
           if (data.status == "pending") {
             output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
           }else if (data.status == "cooking") {
-            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="getctime(this)">Get ETA</a>';
           }else if (data.status == "RFD") {
-            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="getrfdtime(this)">Get ETA</a>';
           }else if (data.status == "OFD") {
-            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="gettime(this)">Get ETA</a>';
+            output +=  '<a class="btn btn-outline-primary btn-sm" data-id="'+data.OrderId+'" id="geteta" onclick="getrfdtime(this)">Get ETA</a>';
           }
           else {
             output +=  '<p>Estimated Time of Arrival: Error</p>';
