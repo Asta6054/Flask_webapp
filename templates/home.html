@@ -247,8 +247,14 @@
           document.getElementById("review_addr").innerHTML = "Delivery Type : Cash On Deliver (COD)";
           document.getElementById("review_addr").innerHTML = "Your order will be sent to : "+ obj.address;
 
-          document.getElementById("review_ETA").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
-
+          if(rhours < 10 && rminutes < 10){
+            document.getElementById("review_ETA").innerHTML = "Estimated Time: 0"+rhours+":0"+rminutes;
+          }else if(rhours < 10 && rminutes > 10){
+            document.getElementById("review_ETA").innerHTML = "Estimated Time: 0"+rhours+":"+rminutes;
+          }else {
+            document.getElementById("review_ETA").innerHTML = "Estimated Time: "+rhours+":"+rminutes;
+          }
+          
           document.getElementById("review_tax").innerHTML = "Tax: $"+ totax;
           document.getElementById("review_total").innerHTML = "Total: $"+ topr;
           document.getElementById("review_grandtot").innerHTML = "Grant Total: $"+ totp;
