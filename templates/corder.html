@@ -91,7 +91,6 @@ user_id = document.getElementById("user_id").innerHTML;
     }).done(function(data) {
       var output = '';
       $.each(data, function(key, data){
-        data);
         if (data.Uid == user_id) {
           if(data.status == "pending" || data.status == "cooking" || data.status == "RFD" || data.status == "OFD"){
           output +=  '<div class="col" id="pend'+data.OrderId+'">';
