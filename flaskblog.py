@@ -605,7 +605,7 @@ def reviewAjax():
     order = mongo.db.order
     print("608 ",order['CookTime'])
 
-    count_order = order.find().count() + 1
+    count_order = int(order.count()) + 1
     print ("order:", count_order)
 
     print("$$",time_list)
